@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="" type="image/x-icon" />
+    <link rel="shortcut icon" href="" type="image/x-icon" />
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./public/styles/main.css">
+    <title>没有名字</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <p class="navbar-text pull-right">如何使用?<a href="#" class="navbar-link">点击这里获取帮助</a></p>
+      <ul class="nav navbar-nav">
+        <li><a href="#">名字</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">功能 <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#"><span class="glyphicon glyphicon-dashboard"></span> 数据包监控</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div class="container-fluid fullHeight">
+      <div class="row">
+        <div class="col-bg-6 col-sm-6 col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">设置</div>
+            <div class="panel-body">
+              <div class="btn-group">
+                <button type="button" class="btn btn-info">UI主题</button>
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Light</a></li>
+                  <li><a href="#">Dark</a></li>
+                </ul>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input name="voice" type="checkbox">声音
+                </label>
+                <label>
+                  <input name="slient" type="checkbox">静默监控
+                </label>
+              </div>
+              <button type="button" class="btn btn-info">保存</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-bg-6 col-sm-6 col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">统计</div>
+            <div class="panel-body">
+              <div style="background: #000; height: 200px; width: 50%; float: left;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row fixedHeadTableWrapper">
+        <div class="col-bg-12 panel panel-default">
+          <div class="panel-heading">
+            <p>数据包</p>
+            <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-play"></span> 开始抓取</button>
+            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-pause"></span> 停止抓取</button>
+          </div>
+          <div class="panel-body">
+            <table class="table table-hover table-condensed text-center">
+              <thead>
+                <tr>
+                  <td>数据包</td>
+                  <td>ip</td>
+                  <td>详情</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="info">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="warning">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="info">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+                <tr class="">
+                  <td>aaa</td>
+                  <td>192.0.0.1</td>
+                  <td>1231231321312</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./public/javascripts/main.js"></script>
+    <script src="./node_modules/mockjs/dist/mock-min.js"></script>
+    <script src="./public/javascripts/test.js"></script>
+  </body>
+</html>

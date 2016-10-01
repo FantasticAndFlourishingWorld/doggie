@@ -1,0 +1,16 @@
+html, body {
+  height: 100%;
+}
+.fullHeight {
+  height: 100%;
+}
+.halfHeight {
+  height: 50%;
+  overflow-y: scroll;
+}
+.fixed {
+  position: fixed;
+}
+.fixedHeadTableWrapper {
+  /*height: 100%;*/
+}
