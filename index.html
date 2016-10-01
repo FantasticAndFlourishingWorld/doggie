@@ -4,19 +4,38 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="" type="image/x-icon" />
-    <link rel="shortcut icon" href="" type="image/x-icon" />
+    <link rel="icon" href="" type="image/x-icon">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./public/styles/main.css">
     <script typw="text/javascript">
       window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min.js');
     </script>
+    <script src="./node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./public/styles/main.css">
     <title>没有名字</title>
   </head>
   <body>
     <nav class="navbar navbar-inverse">
-      <p class="navbar-text pull-right">如何使用?<a href="#" class="navbar-link">点击这里获取帮助</a></p>
+      <p class="navbar-text pull-right">如何使用?<a href="#" class="navbar-link" data-toggle="modal" data-target=".help-modal-lg">点击这里获取帮助</a></p>
+      <div class="modal fade help-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <h3>帮助</h3>
+            </div>
+            <div class="modal-body">
+              <h4>欢迎使用本系统, 如果有疑问可以提交<a href="https://github.com/FantasticAndFlourishingWorld/sniff-app-client/issues" target="_blank">issue</a></h4>
+              <p>这里是说明啊啊啊啊啊</p>
+              <p>这里是说明啊啊啊啊啊是第二段哦</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <ul class="nav navbar-nav">
         <li><a href="#">名字</a></li>
         <li class="dropdown">
@@ -50,10 +69,10 @@
               </div>
               <div class="checkbox">
                 <label>
-                  <input name="voice" type="checkbox">声音
+                  <input name="voice" type="checkbox">开启声音
                 </label>
                 <label>
-                  <input name="slient" type="checkbox">静默监控
+                  <input name="slient" type="checkbox">开启提醒
                 </label>
               </div>
               <button type="button" class="btn btn-info">保存</button>
@@ -64,7 +83,13 @@
           <div class="panel panel-default">
             <div class="panel-heading">统计</div>
             <div class="panel-body">
-              <div style="background: #000; height: 200px; width: 50%; float: left;"></div>
+              <div class="row">
+                <div style="background: #000; height: 200px;" class="col-bg-6 col-md-6 col-sm-12"></div>
+                <div class="col-bg-6 col-md-6 col-sm-12">
+                  <p class="text-muted">系统信息 <span class="text-danger">darwin</span></p>
+                  <p class="text-muted">网络状况 <span class="text-success">良好</span></p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
