@@ -2,7 +2,7 @@
   "name": "sniff-app-client",
   "version": "0.1.0",
   "description": "The client of sniff application",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": ""
   },
