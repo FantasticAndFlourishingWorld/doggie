@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="" type="image/x-icon">
     <link rel="shortcut icon" href="" type="image/x-icon">
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./public/styles/main.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../public/styles/main.css">
     <script typw="text/javascript">
-      window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min.js');
+      window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.min.js');
     </script>
-    <script src="./node_modules/jquery/dist/jquery.slim.min.js"></script>
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <title>没有名字</title>
   </head>
   <body>
@@ -30,8 +30,13 @@
             </div>
             <div class="modal-body">
               <h4>欢迎使用本系统, 如果有疑问可以提交<a href="https://github.com/FantasticAndFlourishingWorld/sniff-app-client/issues" target="_blank">issue</a></h4>
-              <p>这里是说明啊啊啊啊啊</p>
-              <p>这里是说明啊啊啊啊啊是第二段哦</p>
+              <p>本系统主要功能:</p>
+              <p>对用户上网的流量进行统计，包括数据包数，链接数，链接ip地址及数量等。</p>
+              <p>记录用户的上网行为，包括链接目标地址、端口等链接信息、使用应用信息。</p>
+              <p>对用户的HTTP访问内容进行管控，限制用户对某些url地址的访问行为。</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">知道了</button>
             </div>
           </div>
         </div>
@@ -43,7 +48,7 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="#"><span class="glyphicon glyphicon-dashboard"></span> 数据包监控</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
+            <li class="settingsOpenBtn"><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
             <li class="divider"></li>
             <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
           </ul>
@@ -54,10 +59,10 @@
       <div class="row">
         <div class="col-bg-6 col-sm-6 col-xs-12">
           <div class="panel panel-default">
-            <div class="panel-heading">设置</div>
+            <div class="panel-heading">页面设置</div>
             <div class="panel-body">
               <div class="btn-group">
-                <button type="button" class="btn btn-info">UI主题</button>
+                <button type="button" class="btn btn-info">主题切换</button>
                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                   <span class="sr-only">Toggle Dropdown</span>
@@ -95,32 +100,29 @@
         </div>
       </div>
       <div class="row fixedHeadTableWrapper">
-        <div class="col-bg-12 panel panel-default">
-          <div class="panel-heading">
-            <p>数据包</p>
-            <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-play"></span> 开始抓取</button>
-            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-pause"></span> 停止抓取</button>
-          </div>
-          <div class="panel-body">
-            <table class="table table-hover table-condensed text-center">
-              <thead>
-                <tr>
-                  <td>数据包编号</td>
-                  <td>ip</td>
-                  <td>协议</td>
-                </tr>
-              </thead>
-              <tbody>
-
-              </tbody>
-            </table>
+        <div class="col-bg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <p>数据包</p>
+              <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-play"></span> 开始抓取</button>
+              <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-pause"></span> 停止抓取</button>
+            </div>
+            <div class="panel-body">
+              <table class="table table-hover table-condensed text-center">
+                <thead>
+                  <tr>
+                    <td>数据包编号</td>
+                    <td>ip</td>
+                    <td>协议</td>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <script src="./public/javascripts/main.js"></script>
-    <script src="./node_modules/mockjs/dist/mock-min.js"></script>
-    <script src="./public/javascripts/test.js"></script>
+    <script src="../javascripts/main.js"></script>
   </body>
 </html>

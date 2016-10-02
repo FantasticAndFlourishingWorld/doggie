@@ -8,5 +8,3 @@ var data = Mock.mock({
         'protocol': '@protocol'
     }]
 })
-
-renderPcaps(data.pcaps);
