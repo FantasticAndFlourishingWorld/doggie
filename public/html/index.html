@@ -63,7 +63,7 @@
             <div class="panel-body">
               <div class="btn-group">
                 <button type="button" class="btn btn-info">主题切换</button>
-                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                <button type="button" class="btn btn-info dropdown-toggle settings-theme" data-toggle="dropdown">
                   <span class="caret"></span>
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
@@ -74,10 +74,10 @@
               </div>
               <div class="checkbox">
                 <label>
-                  <input name="voice" type="checkbox">开启声音
+                  <input name="voice" class="settings-voice" type="checkbox">开启声音
                 </label>
                 <label>
-                  <input name="slient" type="checkbox">开启提醒
+                  <input name="notice" class="settings-notice" type="checkbox">开启提醒
                 </label>
               </div>
               <button type="button" class="btn btn-info">保存</button>
@@ -89,17 +89,17 @@
             <div class="panel-heading">统计</div>
             <div class="panel-body">
               <div class="row">
-                <div style="background: #000; height: 200px;" class="col-bg-6 col-md-6 col-sm-12"></div>
+                <div style="background: #000; height: 100px;" class="col-bg-6 col-md-6 col-sm-12"></div>
                 <div class="col-bg-6 col-md-6 col-sm-12">
-                  <p class="text-muted">系统信息 <span class="text-danger">darwin</span></p>
-                  <p class="text-muted">网络状况 <span class="text-success">良好</span></p>
+                  <p class="text-muted">系统信息 <span class="text-danger os-type"></span> <span class="text-danger os-arch"></span> <span class="text-danger os-release"></span></p>
+                  <p class="text-muted">网络状况 <span class="text-success os-hostname"></span></p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row fixedHeadTableWrapper">
+      <div class="row fixed-head-table-wrapper">
         <div class="col-bg-12">
           <div class="panel panel-default">
             <div class="panel-heading">

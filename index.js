@@ -1,5 +1,6 @@
 var electron = require('electron');
 var Mock = require('mockjs');
+var os = require('os');
 
 var globalShortcutMap = {
   'voice': 'Shift+s',
@@ -21,6 +22,7 @@ var settingsWindow = null;
 function createWindow () {
 
   mainWindow = new BrowserWindow({
+    title: 'Snifff',
     width: 800,
     height: 600
   });
@@ -44,6 +46,11 @@ function createWindow () {
             'protocol': '@protocol'
         }]
     });
+    data.os = {};
+    data.os.type = os.type();
+    data.os.hostname = os.hostname();
+    data.os.release = os.release();
+    data.os.arch = os.arch();
     webContents.send('init', JSON.stringify(data));
   });
 
@@ -57,6 +64,7 @@ function createWindow () {
     }
 
     settingsWindow = new BrowserWindow({
+      title: '设置',
       frame: false,
       height: 400,
       resizable: false,
@@ -72,6 +80,7 @@ function createWindow () {
   ipc.on('close-settings-window', function () {
     settingsWindow.close();
   });
+
 }
 
 app.on('ready', createWindow);

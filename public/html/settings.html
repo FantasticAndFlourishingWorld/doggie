@@ -19,12 +19,39 @@
     <div class="container-fluid fullHeight">
       <div class="row">
         <div class="col-bg-12 panel panel-default">
-          <div class="panel-heading">设置</div>
+          <div class="panel-heading">
+            设置
+            <button type="button" class="close settingsCloseBtn">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+          </div>
           <div class="panel-body">
-            
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-info">主题切换</button>
+              <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Light</a></li>
+                <li><a href="#">Dark</a></li>
+              </ul>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input name="voice" class="settings-voice" type="checkbox">开启声音
+              </label>
+              <label>
+                <input name="slient" class="settings-notice" type="checkbox">开启提醒
+              </label>
+            </div>
+
           </div>
           <div class="panel-footer">
-            <button type="button" class="btn btn-primary settingsCloseBtn">关闭</button>
+            <button type="button" class="btn btn-info settingsSaveBtn">保存</button>
+            <button type="button" class="btn btn-danger settingsCloseBtn">关闭</button>
           </div>
         </div>
       </div>
