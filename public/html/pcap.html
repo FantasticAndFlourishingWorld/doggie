@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="" type="image/x-icon">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../public/styles/main.css">
+    <script typw="text/javascript">
+      window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.min.js');
+    </script>
+    <script src="../../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <title>数据包分析</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse">
+      <p class="navbar-text pull-right"><a href="#" class="navbar-link" data-toggle="modal" data-target=".help-modal-lg">帮助</a></p>
+      <div class="modal fade help-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <h3>帮助</h3>
+            </div>
+            <div class="modal-body">
+              <h4>欢迎使用本系统, 如果有疑问可以提交<a href="https://github.com/FantasticAndFlourishingWorld/sniff-app-client/issues" target="_blank">issue</a></h4>
+              <p>本系统主要功能:</p>
+              <p>对用户上网的流量进行统计，包括数据包数，链接数，链接ip地址及数量等。</p>
+              <p>记录用户的上网行为，包括链接目标地址、端口等链接信息、使用应用信息。</p>
+              <p>对用户的HTTP访问内容进行管控，限制用户对某些url地址的访问行为。</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">知道了</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="#">名字</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">功能 <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="index.html"><span class="glyphicon glyphicon glyphicon-home"></span> 主菜单</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
+            <li class="settingsOpenBtn"><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div class="container-fluid fullHeight">
+      <div class="row">
+        <div id="drop-file" style="background:red;">aaaaa</div>
+      </div>
+    </div>
+    <script src="../javascripts/pcap.js"></script>
+  </body>
+</html>

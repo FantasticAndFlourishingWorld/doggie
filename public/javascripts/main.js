@@ -1,4 +1,7 @@
-var ipc = require('electron').ipcRenderer;
+var electron = require('electron');
+var utils = require(__dirname + '/../javascripts/utils.js');
+
+var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
 
@@ -6,6 +9,7 @@ $(document).ready(function () {
     data = JSON.parse(data);
     renderPcaps(data.pcaps);
     renderOs(data.os);
+    initSettings();
   });
   ipc.on('global-shortcut', function (event, code) {
     // short-cut-biding
@@ -17,15 +21,16 @@ $(document).ready(function () {
   });
   $('.settingsCloseBtn').click(function () {
     ipc.send('close-settings-window');
+    initSettings();
   });
   $('.settingsSaveBtn').click(function () {
 
   });
   $('.settings-voice').change(function (event) {
-    alert(event.target.checked);
+    utils.saveSettings('voice', event.target.checked);
   });
   $('.settings-notice').change(function (event) {
-    alert(event.target.checked);
+    utils.saveSettings('notice', event.target.checked);
   });
   $('.settings-theme').change(function (event) {
     alert(event.target.selected);
@@ -54,4 +59,9 @@ function renderOs (os) {
   for (var key in os) {
     $('.os-' + key).html(os[key]);
   }
+}
+
+function initSettings () {
+  $('.settings-voice').prop('checked', utils.readSettings('voice'));
+  $('.settings-notice').prop('checked', utils.readSettings('notice'));
 }
