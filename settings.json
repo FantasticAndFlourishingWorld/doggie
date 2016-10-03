@@ -1,5 +1,5 @@
 {
   "voice": true,
-  "notice": true,
+  "notice": false,
   "theme": 0
 }

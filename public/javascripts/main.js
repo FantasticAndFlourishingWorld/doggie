@@ -5,9 +5,16 @@ var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
 
+  Notification.requestPermission(function (status) {
+    if (Notification.permission !== status) {
+      Notification.permission = status;
+    }
+  });
+
+  var n = new Notification('Hi');
+
   ipc.on('init', function (event, data) {
     data = JSON.parse(data);
-    renderPcaps(data.pcaps);
     renderOs(data.os);
     initSettings();
   });
@@ -37,23 +44,6 @@ $(document).ready(function () {
   });
 
 });
-
-function renderPcaps (pcaps) {
-  var protocolClasset = {
-    'http': 'success',
-    'mailto': 'warning',
-    'tcp': 'info'
-  };
-  var $wrapper = $('.fixed-head-table-wrapper tbody');
-  for (var i = 0, len = pcaps.length; i < len; ++i) {
-    var node = '<tr class="' + (protocolClasset[pcaps[i].protocol] || '') + '">';
-    node += '<td>' + i + '</td>';
-    node += '<td>' + pcaps[i].ip + '</td>';
-    node += '<td>' + pcaps[i].protocol + '</td>';
-    node += '</tr>';
-    $wrapper.append(node);
-  }
-}
 
 function renderOs (os) {
   for (var key in os) {
