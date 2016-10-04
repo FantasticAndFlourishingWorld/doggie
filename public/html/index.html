@@ -41,6 +41,50 @@
           </div>
         </div>
       </div>
+
+      <p class="navbar-text pull-right"><a href="#" class="navbar-link" data-toggle="modal" data-target=".settings-modal-lg">设置</a></p>
+      <div class="modal fade settings-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <h3>设置</h3>
+            </div>
+            <div class="modal-body">
+              <div class="panel panel-default">
+                <div class="panel-heading">页面设置</div>
+                <div class="panel-body">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-info">主题切换</button>
+                    <button type="button" class="btn btn-info dropdown-toggle settings-theme" data-toggle="dropdown">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Light</a></li>
+                      <li><a href="#">Dark</a></li>
+                    </ul>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input name="voice" class="settings-voice" type="checkbox">开启声音
+                    </label>
+                    <label>
+                      <input name="notice" class="settings-notice" type="checkbox">开启提醒
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">完成</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <ul class="nav navbar-nav">
         <li><a href="#">名字</a></li>
         <li class="dropdown">
@@ -48,7 +92,7 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="pcap.html"><span class="glyphicon glyphicon-dashboard"></span> 数据包监控</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
-            <li class="settingsOpenBtn"><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
             <li class="divider"></li>
             <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
           </ul>
@@ -58,33 +102,11 @@
     <div class="container-fluid fullHeight">
       <div class="row">
         <div class="col-bg-6 col-sm-6 col-xs-12">
-          <div class="panel panel-default">
-            <div class="panel-heading">页面设置</div>
-            <div class="panel-body">
-              <div class="btn-group">
-                <button type="button" class="btn btn-info">主题切换</button>
-                <button type="button" class="btn btn-info dropdown-toggle settings-theme" data-toggle="dropdown">
-                  <span class="caret"></span>
-                  <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Light</a></li>
-                  <li><a href="#">Dark</a></li>
-                </ul>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input name="voice" class="settings-voice" type="checkbox">开启声音
-                </label>
-                <label>
-                  <input name="notice" class="settings-notice" type="checkbox">开启提醒
-                </label>
-              </div>
-              <button type="button" class="btn btn-info">保存</button>
-            </div>
-          </div>
+
         </div>
-        <div class="col-bg-6 col-sm-6 col-xs-12">
+      </div>
+      <div class="row">
+        <div class="col-bg-12 col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading">统计</div>
             <div class="panel-body">

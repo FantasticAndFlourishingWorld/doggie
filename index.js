@@ -4,7 +4,7 @@ var os = require('os');
 
 var globalShortcutMap = {
   'voice': 'Shift+s',
-  'toggleTheme': 'Shift+t'
+  'notice': 'Shift+n'
 };
 
 var app = electron.app;

@@ -1,4 +1,5 @@
 var electron = require('electron');
+var cp = require('child_process');
 
 var ipc = electron.ipcRenderer;
 
@@ -16,6 +17,9 @@ $(document).ready(function () {
     renderPcaps(state.page, state.perPage, data.pcaps);
   });
 
+  $('.btn-clear-filter-rule').click(function () {
+    $('.filter-rule').val('');
+  });
   $('.previous').click(function () {
     if (state.page > 1) {
       state.page -= 1;
@@ -31,25 +35,65 @@ $(document).ready(function () {
 
   readFile('drop-file');
 
+  var sniffer = null;
+  $('.start_sniff').click(function () {
+    if (!sniffer) {
+      sniffer = cp.spawn('python', [__dirname + '/../py/sniffer.py']);
+
+      sniffer.stderr.setEncoding('utf8');
+      sniffer.stderr.on('data', function (err) {
+        console.log(err);
+      });
+      sniffer.stdout.on('data', function (data) {
+        data = data.toString();
+        data.length > 10 && console.log(data);
+      });
+      sniffer.on('exit', function (code) {
+        // console.log(code);
+      });
+    }
+  });
+  $('.stop_sniff').click(function () {
+    if (sniffer) {
+      sniffer.kill();
+      sniffer = null;
+    }
+  });
+
 });
 
 function readFile (wrapId) {
-  var $el = $('#' + wrapId);
-  $el.on('dragover', function () {
+  var holder = document.getElementById(wrapId);
+  holder.ondragover = function () {
     return false;
-  });
-  $el.on('dragleave', function () {
+  };
+  holder.ondragleave = holder.ondragend = function () {
     return false;
-  });
-  $el.on('dragend', function () {
-    return false;
-  });
-  $el.on('drop', function (e) {
+  };
+  holder.ondrop = function (e) {
     e.preventDefault();
     var file = e.dataTransfer.files[0];
-    alert(file);
+    if (!file.name.endsWith('.pcap')) {
+      $('p', holder).html('只能解析pcap文件');
+      setTimeout(function () {
+        $('p', holder).html('将数据包文件拖拽到此处解析');
+      }, 1800);
+    } else {
+      var rdpcap = cp.spawn('python', [__dirname + '/../py/read_pcap.py', file.path]);
+      rdpcap.stderr.setEncoding('utf8');
+      rdpcap.stderr.on('data', function (err) {
+        console.log(err);
+      });
+      rdpcap.stdout.on('data', function (data) {
+        console.log(data.toString());
+      });
+      rdpcap.on('exit', function (code) {
+        console.log('done');
+      });
+    }
+
     return false;
-  });
+  };
 }
 
 function renderPcaps (page, perPage, pcaps) {
