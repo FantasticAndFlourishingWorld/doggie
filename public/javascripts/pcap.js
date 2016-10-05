@@ -50,9 +50,10 @@ $(document).ready(function () {
       sniffer.stdout.on('data', function (data) {
         console.log(data.toString());
         pktCount += 1;
-        console.log(pktCount);
+        $('.pkt-count').html('已抓取到' + pktCount + '个数据包');
       });
       sniffer.on('exit', function (code) {
+        $('.pkt-count').html('');
         // console.log('exit' + code);
       });
     }
@@ -112,7 +113,8 @@ function renderPcaps (page, perPage, pcaps) {
   for (var i = (page - 1) * perPage, len = Math.min(pcaps.length, page * perPage); i < len; ++i) {
     var node = '<tr class="' + (protocolClasset[pcaps[i].protocol] || '') + '">';
     node += '<td>' + (i + 1) + '</td>';
-    node += '<td>' + pcaps[i].ip + '</td>';
+    node += '<td>' + pcaps[i].srcIp + '</td>';
+    node += '<td>' + pcaps[i].dstIp + '</td>';
     node += '<td>' + pcaps[i].protocol + '</td>';
     node += '</tr>';
     $wrapper.append(node);

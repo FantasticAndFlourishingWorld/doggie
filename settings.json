@@ -2,5 +2,6 @@
   "voice": false,
   "notice": false,
   "theme": 0,
-  "password_key": "ffworld"
+  "password_key": "ffworld",
+  "blacklist": []
 }

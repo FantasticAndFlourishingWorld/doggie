@@ -60,28 +60,52 @@
         <div class="col-bg-10 col-bg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
           <div class="panel panel-default">
             <div class="panel-heading">
-              更改密码
+              <ul class="nav nav-pills" role="tablist">
+                <li class="active" role="presentation"><a href="#password" data-toggle="tab">密码设置</a></li>
+                <li role="presentation"><a href="#blacklist" data-toggle="tab">访问黑名单设置</a></li>
+              </ul>
             </div>
             <div class="panel-body">
-              <div class="alert alert-danger settings-alert-danger"></div>
-              <div class="alert alert-success settings-alert-success"></div>
-              <form class="form-horizontal" role="form">
-                <div class="form-group">
-                  <label for="old-settings-password" class="col-sm-2 control-label">旧密码</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" name="settings-old-password" placeholder="旧密码">
-                  </div>
-                  <label for="settings-password" class="col-sm-2 control-label">密码</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" name="settings-password" placeholder="密码">
-                  </div>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="password">
+                  <div class="alert alert-danger settings-password-alert-danger"></div>
+                  <div class="alert alert-success settings-password-alert-success"></div>
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="old-settings-password" class="col-sm-2 control-label">旧密码</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" name="settings-old-password" placeholder="旧密码">
+                      </div>
+                      <label for="settings-password" class="col-sm-2 control-label">密码</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" name="settings-password" placeholder="密码">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-primary btn-block settings-password-submit">确认</button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-2 col-sm-10">
-                    <button type="button" class="btn btn-info btn-block settings-submit">确认</button>
-                  </div>
+                <div role="tabpanel" class="tab-pane" id="blacklist">
+                  <div class="alert alert-danger settings-blacklist-alert-danger"></div>
+                  <div class="alert alert-success settings-blacklist-alert-success"></div>
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="old-settings-password" class="col-sm-2 control-label">url</label>
+                      <div class="col-sm-10">
+                        <input type="url" class="form-control" name="settings-blacklist-url" placeholder="输入需要屏蔽的url">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-primary btn-block settings-blacklist-submit">确认</button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>

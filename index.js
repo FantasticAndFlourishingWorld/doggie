@@ -44,7 +44,8 @@ function createWindow () {
   webContents.on('did-finish-load', function () {
     var data = Mock.mock({
         'pcaps|50-100': [{
-            'ip|+1': '@ip',
+            'srcIp|+1': '@ip',
+            'dstIp|+1': '@ip',
             'protocol': '@protocol'
         }]
     });

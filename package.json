@@ -4,7 +4,7 @@
   "description": "The client of sniff application",
   "main": "index.js",
   "scripts": {
-    "test": ""
+    "rebuild": "electron-rebuild -f -w url crypto"
   },
   "repository": {
     "type": "git",
@@ -24,14 +24,9 @@
     "animate.css": "^3.5.2",
     "bootstrap": "^3.3.7",
     "jquery": "^3.1.1",
-    "koa": "^2.0.0",
-    "nconf": "^0.8.4",
-    "vue": "^2.0.1",
-    "webcrypto": "^0.1.0"
+    "nconf": "^0.8.4"
   },
   "devDependencies": {
-    "mocha": "^3.1.0",
-    "mockjs": "^1.0.1-beta3",
-    "should": "^11.1.0"
+    "mockjs": "^1.0.1-beta3"
   }
 }
