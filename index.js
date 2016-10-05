@@ -1,6 +1,7 @@
 var electron = require('electron');
 var Mock = require('mockjs');
 var os = require('os');
+var utils = require(__dirname + '/public/javascripts/utils.js');
 
 var globalShortcutMap = {
   'voice': 'Shift+s',
@@ -11,6 +12,7 @@ var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 var ipc = electron.ipcMain;
 var globalShortcut = electron.globalShortcut;
+var session = electron.session;
 var Random = Mock.Random;
 
 Random.ip();
@@ -51,6 +53,7 @@ function createWindow () {
     data.os.hostname = os.hostname();
     data.os.release = os.release();
     data.os.arch = os.arch();
+    data.passwordKey = utils.readSettings('password_key');
     webContents.send('init', JSON.stringify(data));
   });
 

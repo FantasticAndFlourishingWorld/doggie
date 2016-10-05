@@ -47,52 +47,46 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">功能 <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="index.html"><span class="glyphicon glyphicon glyphicon-home"></span> 主菜单</a></li>
+            <li><a href="pcap.html"><span class="glyphicon glyphicon-dashboard"></span> 数据包监控</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
-            <li class="settingsOpenBtn"><a href="settings.html"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
             <li class="divider"></li>
             <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
           </ul>
         </li>
       </ul>
     </nav>
-    <div class="container-fluid fullHeight">
-      <div class="jumbotron" id="drop-file">
-        <p>将数据包文件拖拽到此处解析</p>
-      </div>
-      <div class="row fixed-head-table-wrapper">
-        <div class="col-bg-12">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-bg-10 col-bg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <p>数据包</p>
-              <form class="form-inline" role="form">
-                <div class="form-group">
-                  <input type="text" class="form-control form-horizental filter-rule" name="filter-rule" placeholder="过滤规则(bpf)">
-                  <button type="button" class="btn btn-default btn-clear-filter-rule"><span class="glyphicon glyphicon-refresh"></span> 清空</button>
-                  <button type="button" class="btn btn-info start_sniff" data-loading-text="抓取中" audocomplete="off"><span class="glyphicon glyphicon-play"></span> 开始抓取</button>
-                  <button type="button" class="btn btn-danger stop_sniff"><span class="glyphicon glyphicon-pause"></span> 停止抓取</button>
-                </div>
-              </form>
+              更改密码
             </div>
             <div class="panel-body">
-              <table class="table table-hover table-condensed text-center">
-                <thead>
-                  <tr>
-                    <td>数据包编号</td>
-                    <td>ip</td>
-                    <td>协议</td>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-            <div class="panel-footer">
-              <button type="button" class="previous btn btn-info">&larr; 上一页</button>
-              <button type="button" class="next btn btn-info">下一页 &rarr;</button>
+              <div class="alert alert-danger settings-alert-danger"></div>
+              <div class="alert alert-success settings-alert-success"></div>
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label for="old-settings-password" class="col-sm-2 control-label">旧密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" name="settings-old-password" placeholder="旧密码">
+                  </div>
+                  <label for="settings-password" class="col-sm-2 control-label">密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" name="settings-password" placeholder="密码">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-info btn-block settings-submit">确认</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <script src="../javascripts/pcap.js"></script>
+    <script src="../javascripts/settings.js"></script>
   </body>
 </html>

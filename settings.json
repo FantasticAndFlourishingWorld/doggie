@@ -1,5 +1,6 @@
 {
-  "voice": true,
+  "voice": false,
   "notice": false,
-  "theme": 0
+  "theme": 0,
+  "password_key": "ffworld"
 }

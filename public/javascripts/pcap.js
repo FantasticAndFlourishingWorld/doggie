@@ -36,20 +36,24 @@ $(document).ready(function () {
   readFile('drop-file');
 
   var sniffer = null;
+  var $loadingBtn = null;
   $('.start_sniff').click(function () {
+    var pktCount = 0;
     if (!sniffer) {
-      sniffer = cp.spawn('python', [__dirname + '/../py/sniffer.py']);
+      $loadingBtn = $(this).button('loading');
+      sniffer = cp.spawn('python', [__dirname + '/../py/sniffer.py', $('.filter-rule').val()]);
 
       sniffer.stderr.setEncoding('utf8');
       sniffer.stderr.on('data', function (err) {
         console.log(err);
       });
       sniffer.stdout.on('data', function (data) {
-        data = data.toString();
-        data.length > 10 && console.log(data);
+        console.log(data.toString());
+        pktCount += 1;
+        console.log(pktCount);
       });
       sniffer.on('exit', function (code) {
-        // console.log(code);
+        // console.log('exit' + code);
       });
     }
   });
@@ -58,6 +62,7 @@ $(document).ready(function () {
       sniffer.kill();
       sniffer = null;
     }
+    $loadingBtn.button('reset');
   });
 
 });

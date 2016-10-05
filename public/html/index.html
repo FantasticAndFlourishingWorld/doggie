@@ -41,7 +41,6 @@
           </div>
         </div>
       </div>
-
       <p class="navbar-text pull-right"><a href="#" class="navbar-link" data-toggle="modal" data-target=".settings-modal-lg">设置</a></p>
       <div class="modal fade settings-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -92,7 +91,7 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="pcap.html"><span class="glyphicon glyphicon-dashboard"></span> 数据包监控</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
+            <li><a href="settings.html"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
             <li class="divider"></li>
             <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
           </ul>
@@ -117,6 +116,51 @@
                   <p class="text-muted">网络状况 <span class="text-success os-hostname"></span></p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade set-password-modal-lg">
+        <div class="modal-dialog modal-bg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4>这可能是你第一次使用本软件, 请先设置密码</h4>
+            </div>
+            <div class="modal-body">
+              <div class="alert alert-warning" role="warning">设置完成后每次使用本软件都需要输入密码, 你可以在个人设置中修改此密码。</div>
+              <div class="alert alert-danger set-password-alert-danger" role="alert"></div>
+              <form class="form-inline" role="form">
+                <div class="form-group">
+                  <label for="password">密码</label>
+                  <input type="password" class="form-control" name="set-password" placeholder="密码">
+                  <label for="password2">再次输入密码</label>
+                  <input type="password" class="form-control" name="set-password2" placeholder="再次输入密码">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary set-password-submit">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade password-modal-lg">
+        <div class="modal-dialog modal-bg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4>请输入密码</h4>
+            </div>
+            <div class="modal-body">
+              <div class="alert alert-danger password-alert-danger" role="alert"></div>
+              <form class="form-inline" role="form">
+                <div class="form-group">
+                  <label for="password">密码</label>
+                  <input type="password" class="form-control" name="password" placeholder="密码">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary password-submit">确定</button>
             </div>
           </div>
         </div>

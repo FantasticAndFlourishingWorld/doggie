@@ -1,5 +1,4 @@
 var electron = require('electron');
-// var cp = require('child_process');
 var utils = require(__dirname + '/../javascripts/utils.js');
 
 var ipc = electron.ipcRenderer;
@@ -19,6 +18,7 @@ $(document).ready(function () {
     data = JSON.parse(data);
     renderOs(data.os);
     initSettings();
+    initPassword(data.passwordKey);
   });
   ipc.on('global-shortcut', function (event, key) {
     // short-cut-biding
@@ -64,4 +64,42 @@ function renderOs (os) {
 function initSettings () {
   $('.settings-voice').prop('checked', utils.readSettings('voice'));
   $('.settings-notice').prop('checked', utils.readSettings('notice'));
+}
+
+function initPassword (passwordKey) {
+  passwordKey = passwordKey ? passwordKey : 'password';
+  var curPassword = window.localStorage.getItem(passwordKey);
+  if (!curPassword) {
+    $('.set-password-modal-lg').modal({
+      backdrop: false,
+      keyboard: false
+    });
+    $('.set-password-alert-danger').hide();
+    $('.set-password-submit').click(function () {
+      var ps1 = $('input[name=set-password]').val();
+      var ps2 = $('input[name=set-password2]').val();
+      if (ps1 !== ps2) {
+        $('.set-password-alert-danger').html('两次输入必须一致').stop(true, true).show(300).delay(3000).hide(300);
+      } else if (ps1.length < 6) {
+        $('.set-password-alert-danger').html('请输入6位以上的密码').stop(true, true).show(300).delay(3000).hide(300);
+      } else {
+        window.localStorage.setItem(passwordKey, ps1);
+        $('.set-password-modal-lg').modal('hide');
+      }
+    });
+  } else {
+    $('.password-modal-lg').modal({
+      backdrop: false,
+      keyboard: false
+    });
+    $('.password-alert-danger').hide();
+    $('.password-submit').click(function () {
+      var ps = $('input[name=password]').val();
+      if (ps !== curPassword) {
+        $('.password-alert-danger').html('密码不正确, 请重试').stop(true, true).show(300).delay(3000).hide(300);
+      } else {
+        $('.password-modal-lg').modal('hide');
+      }
+    });
+  }
 }
