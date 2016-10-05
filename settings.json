@@ -3,5 +3,20 @@
   "notice": false,
   "theme": 0,
   "password_key": "ffworld",
-  "blacklist": []
+  "blacklist": [
+    {
+      "auth": null,
+      "hash": null,
+      "host": null,
+      "hostname": null,
+      "href": "www.baidu.com",
+      "path": "www.baidu.com",
+      "pathname": "www.baidu.com",
+      "port": null,
+      "protocol": null,
+      "query": null,
+      "search": null,
+      "slashes": null
+    }
+  ]
 }

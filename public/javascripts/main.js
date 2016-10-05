@@ -20,24 +20,16 @@ $(document).ready(function () {
     initSettings();
     initPassword(data.passwordKey);
   });
+
   ipc.on('global-shortcut', function (event, key) {
     // short-cut-biding
     $('.settings-' + key).click();
   });
 
-  // $('.settingsOpenBtn').click(function () {
-  //   ipc.send('open-settings-window');
-  // });
-  // $('.settingsCloseBtn').click(function () {
-  //   ipc.send('close-settings-window');
-  //   initSettings();
-  // });
-  // $('.settingsSaveBtn').click(function () {
-  //
-  // });
   $('.settings-voice').change(function (event) {
     utils.saveSettings('voice', event.target.checked);
   });
+
   $('.settings-notice').change(function (event) {
     utils.saveSettings('notice', event.target.checked);
     if (utils.readSettings('notice')) {
@@ -49,6 +41,7 @@ $(document).ready(function () {
       var n = new Notification('Hi');
     }
   });
+
   $('.settings-theme').change(function (event) {
     alert(event.target.selected);
   });
@@ -69,6 +62,7 @@ function initSettings () {
 function initPassword (passwordKey) {
   passwordKey = passwordKey ? passwordKey : 'password';
   var curPassword = window.localStorage.getItem(passwordKey);
+
   if (!curPassword) {
     $('.set-password-modal-lg').modal({
       backdrop: false,
@@ -83,8 +77,7 @@ function initPassword (passwordKey) {
       } else if (ps1.length < 6) {
         $('.set-password-alert-danger').html('请输入6位以上的密码').stop(true, true).show(300).delay(3000).hide(300);
       } else {
-        window.localStorage.setItem(passwordKey, ps1);
-        $('.set-password-modal-lg').modal('hide');
+        ipc.send('encrypt-password', ps1);
       }
     });
   } else {
@@ -94,12 +87,21 @@ function initPassword (passwordKey) {
     });
     $('.password-alert-danger').hide();
     $('.password-submit').click(function () {
-      var ps = $('input[name=password]').val();
-      if (ps !== curPassword) {
+      var password = $('input[name=password]').val();
+      ipc.send('encrypt-password', password);
+    });
+  }
+
+  ipc.on('encrypt-password-done', function (event, passwordHash) {
+    if (!curPassword) {
+      window.localStorage.setItem(passwordKey, passwordHash);
+      $('.set-password-modal-lg').modal('hide');
+    } else {
+      if (passwordHash !== curPassword) {
         $('.password-alert-danger').html('密码不正确, 请重试').stop(true, true).show(300).delay(3000).hide(300);
       } else {
         $('.password-modal-lg').modal('hide');
       }
-    });
-  }
+    }
+  });
 }

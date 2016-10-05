@@ -20,12 +20,14 @@ $(document).ready(function () {
   $('.btn-clear-filter-rule').click(function () {
     $('.filter-rule').val('');
   });
+
   $('.previous').click(function () {
     if (state.page > 1) {
       state.page -= 1;
       renderPcaps(state.page, state.perPage, state.pcaps);
     }
   });
+
   $('.next').click(function () {
     if (state.page < state.pcaps.length / state.perPage) {
       state.page += 1;
@@ -37,6 +39,7 @@ $(document).ready(function () {
 
   var sniffer = null;
   var $loadingBtn = null;
+
   $('.start_sniff').click(function () {
     var pktCount = 0;
     if (!sniffer) {
@@ -58,6 +61,7 @@ $(document).ready(function () {
       });
     }
   });
+
   $('.stop_sniff').click(function () {
     if (sniffer) {
       sniffer.kill();

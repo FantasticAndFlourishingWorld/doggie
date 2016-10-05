@@ -1,6 +1,8 @@
 var electron = require('electron');
 var Mock = require('mockjs');
 var os = require('os');
+var url = require('url');
+var crypto = require('crypto');
 var utils = require(__dirname + '/public/javascripts/utils.js');
 
 var globalShortcutMap = {
@@ -62,27 +64,11 @@ function createWindow () {
     mainWindow = null;
   });
 
-  ipc.on('open-settings-window', function () {
-    if (settingsWindow) {
-      return;
-    }
-
-    settingsWindow = new BrowserWindow({
-      title: '设置',
-      frame: false,
-      height: 400,
-      resizable: false,
-      width: 300
-    });
-
-    settingsWindow.loadURL(`file://${__dirname}/public/html/settings.html`);
-
-    settingsWindow.on('closed', function () {
-      settingsWindow = null;
-    });
+  ipc.on('encrypt-password', function (event, password) {
+    event.sender.send('encrypt-password-done', crypto.createHash('md5').update(password).digest('hex'));
   });
-  ipc.on('close-settings-window', function () {
-    settingsWindow.close();
+  ipc.on('parse-url', function (event, urlString) {
+    event.sender.send('parse-url-done', url.parse(urlString, false, true));
   });
 
 }
