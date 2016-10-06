@@ -1,41 +1,10 @@
 var electron = require('electron');
+var evilscan = require('evilscan');
 var utils = require(__dirname + '/../javascripts/utils.js');
 
 var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
-
-  var evilscan = require('evilscan');
-
-  var options = {
-      target: '127.0.0.1',
-      port: '1-4000',
-      concurrency: 4000,
-      timeout: 1000,
-      // status: 'O', // Timeout, Refused, Open, Unreachable
-      banner: true
-  };
-
-  var scanner = new evilscan(options);
-
-  scanner.on('result',function(data) {
-          // fired when item is matching options
-          if (data.status === 'open') {
-            console.log(data);
-          }
-  });
-
-  scanner.on('error',function(err) {
-          throw new Error(data.toString());
-  });
-
-  scanner.on('done',function() {
-          // finished !
-          console.log(new Date() - m + 'ms');
-  });
-
-  var m = new Date();
-  // scanner.run();
 
   if (utils.readSettings('notice')) {
     Notification.requestPermission(function (status) {
@@ -76,6 +45,42 @@ $(document).ready(function () {
 
   $('.settings-theme').change(function (event) {
     alert(event.target.selected);
+  });
+
+  $('.scan-btn').click(function () {
+    var options = {
+        target: '127.0.0.1',
+        port: '1-65535',
+        concurrency: 60000,
+        timeout: 100,
+        // status: 'O', // Timeout, Refused, Open, Unreachable
+        banner: true
+    };
+
+    var scanner = new evilscan(options);
+
+    $('.scanned-ports').html('');
+    $('.scan-btn').html('扫描中').addClass('disabled');
+
+    scanner.on('result',function(data) {
+      // fired when item is matching options
+      if (data.status === 'open') {
+        $('.scanned-ports').append('<span class="label label-success scanned-port">' + data.port + '</span>');
+      }
+    });
+
+    scanner.on('error',function(err) {
+      throw new Error(data.toString());
+    });
+
+    scanner.on('done',function() {
+      // finished !
+      console.log(new Date() - m + 'ms');
+      $('.scan-btn').html('开始扫描').removeClass('disabled');
+    });
+
+    var m = new Date();
+    scanner.run();
   });
 
 });

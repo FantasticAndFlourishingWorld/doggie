@@ -14,3 +14,6 @@ html, body {
 .label {
   cursor: pointer;
 }
+.scanned-port {
+  margin-right: 12px;
+}
