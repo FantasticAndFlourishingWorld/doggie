@@ -1,8 +1,8 @@
 var electron = require('electron');
 var Mock = require('mockjs');
 var os = require('os');
-var url = require('url');
 var crypto = require('crypto');
+var evilscan = require('evilscan');
 var utils = require(__dirname + '/public/javascripts/utils.js');
 
 var globalShortcutMap = {
@@ -66,9 +66,6 @@ function createWindow () {
 
   ipc.on('encrypt-password', function (event, password) {
     event.sender.send('encrypt-password-done', crypto.createHash('md5').update(password).digest('hex'));
-  });
-  ipc.on('parse-url', function (event, urlString) {
-    event.sender.send('parse-url-done', url.parse(urlString, false, true));
   });
 
 }

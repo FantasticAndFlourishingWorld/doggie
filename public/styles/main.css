@@ -11,3 +11,6 @@ html, body {
 .fixed {
   position: fixed;
 }
+.label {
+  cursor: pointer;
+}

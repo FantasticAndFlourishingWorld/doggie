@@ -16,7 +16,8 @@ def sniff_callback(pkt):
 def sniff_index(sniff_prn, bpf):
     """The index of the sniff module"""
     # sniff(prn=sniff_prn, store=0)
-    sniff(prn=lambda x:x.sprintf("{IP:%IP.src% -> %IP.dst%\n}"), store=0)
+    sniff_count = 0
+    sniff(prn=lambda x:x.sprintf("{IP:%IP.src% -> %IP.dst%\n%sniff_count++%}"), store=0, count=5)
 
 if __name__ == '__main__':
     sniff_index(sniff_callback, sys.argv[1])

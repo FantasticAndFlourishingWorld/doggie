@@ -5,6 +5,38 @@ var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
 
+  var evilscan = require('evilscan');
+
+  var options = {
+      target: '127.0.0.1',
+      port: '1-4000',
+      concurrency: 4000,
+      timeout: 1000,
+      // status: 'O', // Timeout, Refused, Open, Unreachable
+      banner: true
+  };
+
+  var scanner = new evilscan(options);
+
+  scanner.on('result',function(data) {
+          // fired when item is matching options
+          if (data.status === 'open') {
+            console.log(data);
+          }
+  });
+
+  scanner.on('error',function(err) {
+          throw new Error(data.toString());
+  });
+
+  scanner.on('done',function() {
+          // finished !
+          console.log(new Date() - m + 'ms');
+  });
+
+  var m = new Date();
+  // scanner.run();
+
   if (utils.readSettings('notice')) {
     Notification.requestPermission(function (status) {
       if (Notification.permission !== status) {
@@ -73,9 +105,19 @@ function initPassword (passwordKey) {
       var ps1 = $('input[name=set-password]').val();
       var ps2 = $('input[name=set-password2]').val();
       if (ps1 !== ps2) {
-        $('.set-password-alert-danger').html('两次输入必须一致').stop(true, true).show(300).delay(3000).hide(300);
+        $('.set-password-alert-danger')
+          .html('两次输入必须一致')
+          .stop(true, true)
+          .show(300)
+          .delay(3000)
+          .hide(300);
       } else if (ps1.length < 6) {
-        $('.set-password-alert-danger').html('请输入6位以上的密码').stop(true, true).show(300).delay(3000).hide(300);
+        $('.set-password-alert-danger')
+          .html('请输入6位以上的密码')
+          .stop(true, true)
+          .show(300)
+          .delay(3000)
+          .hide(300);
       } else {
         ipc.send('encrypt-password', ps1);
       }
@@ -98,7 +140,12 @@ function initPassword (passwordKey) {
       $('.set-password-modal-lg').modal('hide');
     } else {
       if (passwordHash !== curPassword) {
-        $('.password-alert-danger').html('密码不正确, 请重试').stop(true, true).show(300).delay(3000).hide(300);
+        $('.password-alert-danger')
+          .html('密码不正确, 请重试')
+          .stop(true, true)
+          .show(300)
+          .delay(3000)
+          .hide(300);
       } else {
         $('.password-modal-lg').modal('hide');
       }
