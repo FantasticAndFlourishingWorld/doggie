@@ -34,7 +34,7 @@ $(document).ready(function () {
 
   $('.settings-blacklist-submit').click(function () {
     var url = $('input[name=settings-blacklist-url]').val();
-    var urlRegExp = new RegExp('^(?:((http|ftp|https):\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?)$');
+    var urlRegExp = new RegExp('^(?:((http):\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?)$');
 
     if (!url) {
       $('.settings-blacklist-alert-danger')
@@ -81,6 +81,8 @@ $(document).ready(function () {
   $('.settings-bpf-submit').click(function () {
     var name = $('input[name=settings-bpf-name]').val();
     var rule = $('input[name=settings-bpf-rule]').val();
+    var bpfKeywords = utils.readSettings('bpfKeywords');
+    var lowerName = name.toLowerCase();
     if (!name) {
       $('.settings-bpf-alert-danger')
         .html('请输入过滤器名称')
@@ -97,6 +99,15 @@ $(document).ready(function () {
         .show(300)
         .delay(2000)
         .hide(300);
+    } else if (bpfKeywords.some(function (keyword) {
+      return keyword === lowerName;
+    })) {
+      $('.settings-bpf-alert-danger')
+        .html('过滤器名称与bpf关键字冲突')
+        .stop(true, true)
+        .show(300)
+        .delay(2000)
+        .hide(300);
     } else if (!rule) {
       $('.settings-bpf-alert-danger')
         .html('请输入过滤器规则')
@@ -106,7 +117,7 @@ $(document).ready(function () {
         .hide(300);
     } else if (false) {
       // send and get validate result of bpf
-      
+
     } else {
       var bpf = utils.readSettings('bpf');
       if (!bpf || !Array.isArray(bpf)) {

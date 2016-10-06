@@ -3,10 +3,29 @@
   "notice": false,
   "theme": 0,
   "password_key": "ffworld",
-  "blacklist": [
-    "www.baidu.com",
-    "www.google.com",
-    "www.tencent.com"
-  ],
-  "bpf": []
+  "blacklist": [],
+  "bpf": [],
+  "bpfKeywords": [
+    "host",
+    "net",
+    "port",
+    "portrange",
+    "src",
+    "dst",
+    "ether",
+    "fddi",
+    "tr",
+    "ip",
+    "ip6",
+    "arp",
+    "rarp",
+    "decnet",
+    "tcp",
+    "udp",
+    "less",
+    "greater",
+    "and",
+    "or",
+    "not"
+  ]
 }
