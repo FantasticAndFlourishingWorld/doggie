@@ -17,6 +17,7 @@ bpflist_len = len(bpflist)
 def nametobpf(name):
     """
       将过滤器名转换为相应的pbf表达式
+      若无相应name，则返回-1
     """
 
     bpf = "-1"
