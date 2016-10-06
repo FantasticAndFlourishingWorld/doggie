@@ -4,7 +4,16 @@
   "theme": 0,
   "password_key": "ffworld",
   "blacklist": [],
-  "bpf": [],
+  "bpf": [
+    {
+      "name": "yanran",
+      "value":"tcp"
+    },
+    {
+      "name": "hanter",
+      "value":"udp"
+    }
+  ],
   "bpfKeywords": [
     "host",
     "net",
