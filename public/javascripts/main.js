@@ -87,7 +87,31 @@ $(document).ready(function () {
 
 function renderOs (os) {
   for (var key in os) {
-    $('.os-' + key).html(os[key]);
+    if (key === 'networkInterfaces') {
+      var networkInterfaces = os[key];
+      for (var k in networkInterfaces) {
+        var networkInterface = networkInterfaces[k];
+        $('.os-networkInterfaces').append('<tr class="active"><td colspan="7">' + k + '</td></tr>');
+        networkInterface.forEach(function (n) {
+          var frag = $('<tr></tr>');
+          var address = n.address || '';
+          var family = n.family || '';
+          var internal = n.internal || false;
+          var mac = n.mac || '';
+          var netmask = n.netmask || '';
+          var scopeid = n.scopeid || '-';
+          frag.append('<td>' + address + '</td>');
+          frag.append('<td>&nbsp&nbsp' + family + '&nbsp&nbsp</td>');
+          frag.append('<td>&nbsp&nbsp' + (internal ? 'yes' : 'no') + '&nbsp&nbsp</td>');
+          frag.append('<td>&nbsp&nbsp' + mac + '&nbsp&nbsp</td>');
+          frag.append('<td>' + netmask + '</td>');
+          frag.append('<td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' + scopeid + '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>');
+          $('.os-networkInterfaces').append(frag);
+        });
+      }
+    } else {
+      $('.os-' + key).html(os[key]);
+    }
   }
 }
 

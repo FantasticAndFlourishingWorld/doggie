@@ -1,17 +1,23 @@
 {
   "voice": false,
   "notice": false,
-  "theme": 0,
+  "theme": [
+    "lumen",
+    "yeti",
+    "darkly",
+    "slate"
+  ],
+  "themeIndex": 3,
   "password_key": "ffworld",
   "blacklist": [],
   "bpf": [
     {
       "name": "yanran",
-      "value":"tcp"
+      "rule": "tcp"
     },
     {
       "name": "hanter",
-      "value":"udp"
+      "rule": "udp"
     }
   ],
   "bpfKeywords": [

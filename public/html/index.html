@@ -16,7 +16,7 @@
     <title>没有名字</title>
   </head>
   <body>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-default">
       <p class="navbar-text pull-right"><a href="#" class="navbar-link" data-toggle="modal" data-target=".help-modal-lg">帮助</a></p>
       <div class="modal fade help-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -62,10 +62,7 @@
                       <span class="caret"></span>
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Light</a></li>
-                      <li><a href="#">Dark</a></li>
-                    </ul>
+                    <ul class="dropdown-menu theme-menu" role="menu"></ul>
                   </div>
                   <div class="checkbox">
                     <label>
@@ -98,7 +95,7 @@
         </li>
       </ul>
     </nav>
-    <div class="container-fluid fullHeight">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-bg-6 col-sm-6 col-xs-12">
 
@@ -110,10 +107,24 @@
             <div class="panel-heading">统计</div>
             <div class="panel-body">
               <div class="row">
-                <div style="background: #000; height: 100px;" class="col-bg-6 col-md-6 col-sm-12"></div>
-                <div class="col-bg-6 col-md-6 col-sm-12">
-                  <p class="text-muted">系统信息 <span class="text-danger os-type"></span> <span class="text-danger os-arch"></span> <span class="text-danger os-release"></span></p>
-                  <p class="text-muted">网络状况 <span class="text-success os-hostname"></span></p>
+                <div class="col-bg-12 col-md-6 col-sm-12">
+                  <p>系统信息 <span class="text-danger os-type"></span> <span class="text-danger os-arch"></span> <span class="text-danger os-release"></span></p>
+                  <p>网络状况 <span class="text-success os-hostname"></span></p>
+                  <div>网络接口
+                    <table class="table table-hover table-bordered text-center">
+                      <thead>
+                        <tr>
+                          <td>ip地址</td>
+                          <td>协议</td>
+                          <td>接入</td>
+                          <td>mac地址</td>
+                          <td>掩码</td>
+                          <td>ipv6标识码</td>
+                        </tr>
+                      </thead>
+                      <tbody class="os-networkInterfaces"></tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,6 +190,7 @@
         </div>
       </div>
     </div>
+    <script src="../javascripts/theme.js"></script>
     <script src="../javascripts/main.js"></script>
   </body>
 </html>
