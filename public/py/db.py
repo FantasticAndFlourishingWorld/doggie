@@ -31,6 +31,8 @@ class SQLite():
         conn = sqlite3.connect(self.dbPath)
         keysStr = ','.join(keys).upper()
         valuesStr = ','.join(values).upper()
+        # print "INSERT INTO " + self.dbName + " (" + keysStr + ") \
+        # VALUES (" + valuesStr + ");"
         conn.execute("INSERT INTO " + self.dbName + " (" + keysStr + ") \
         VALUES (" + valuesStr + ");")
 
@@ -67,11 +69,8 @@ class SQLite():
         conn.close()
 
 if __name__ == "__main__":
-    # example:
     # make sure that when value's type is TEXT, you should make it like "'192.168.1.1'"!
     db = SQLite("PACKET")
-    db.createTable()
-    keys = ["protocol", "sport", "dport"]
-    values = ["'192.168.1.1'", "80", "8080"]
-    db.insertData(keys, values)
+    keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME"]
     data = db.selectData(keys)
+    print data

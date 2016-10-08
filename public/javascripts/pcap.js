@@ -1,9 +1,15 @@
 var electron = require('electron');
 var cp = require('child_process');
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('../../database/packet.db');
 
 var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
+
+  db.all('SELECT * FROM PACKET', function (err, rows) {
+    console.dir(rows);
+  });
 
   var state = {
     page: 1,

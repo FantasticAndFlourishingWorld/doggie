@@ -1,6 +1,6 @@
 {
   "voice": false,
-  "notice": false,
+  "notice": true,
   "theme": [
     "lumen",
     "yeti",
