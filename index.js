@@ -27,8 +27,8 @@ function createWindow () {
 
   mainWindow = new BrowserWindow({
     title: 'Snifff',
-    width: 800,
-    height: 600
+    width: 1024,
+    height: 768
   });
   mainWindow.loadURL(`file://${__dirname}/public/html/index.html`);
 

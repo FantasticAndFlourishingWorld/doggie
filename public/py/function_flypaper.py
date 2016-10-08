@@ -20,7 +20,7 @@ def flypaper(fly):
         proto=fly[IP].proto
         IP_chksum=fly[IP].chksum
         IP_src=fly[IP].src
-        IP_dst=fly[IP].dst   
+        IP_dst=fly[IP].dst
         ###<transport layer>
         if proto==0x06:
             sport=fly[TCP].sport
@@ -37,8 +37,8 @@ def flypaper(fly):
             if "HTTP" in tempfly:
                 application_layer_protocol="HTTP"
                 if "GET" not in tempfly and "POST"not in tempfly and "HEAD"not in tempfly and "PUT"not in tempfly and "DELETE" not in tempfly and "OPTIONS"not in tempfly and "TRACE" not in tempfly and "CONNECT" not in tempfly:
-                    url="" 
-                    print "IPv4 TCP HTTP"                 
+                    url=""
+                    print "IPv4 TCP HTTP"
                     return {"protocol":"HTTP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                             "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
@@ -56,10 +56,10 @@ def flypaper(fly):
                             "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                             "application_layer_protocol":application_layer_protocol,"url":url},
                             "packet":str(fly),
-                            "time":(time.time())}                          
+                            "time":(time.time())}
             else :
-                application_layer_protocol="NOT HTTP" 
-                print "IPv4 TCP NOT HTTP"               
+                application_layer_protocol="NOT HTTP"
+                print "IPv4 TCP NOT HTTP"
                 return {"protocol":"TCP",
                         "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                         "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
@@ -73,7 +73,7 @@ def flypaper(fly):
             len=fly[UDP].len
             chksum=fly[UDP].chksum
              ####<application layer>
-            tempfly=str(fly)            
+            tempfly=str(fly)
             if "HTTP" in tempfly:
                 application_layer_protocol="HTTP"
                 if "GET" not in tempfly and "POST"not in tempfly and "HEAD"not in tempfly and "PUT"not in tempfly and "DELETE" not in tempfly and "OPTIONS"not in tempfly and "TRACE" not in tempfly and "CONNECT" not in tempfly:
@@ -96,7 +96,7 @@ def flypaper(fly):
                             "sport":sport,"dport":dport,"len":len,"chksum":chksum,
                             "application_layer_protocol":application_layer_protocol,"url":url},
                             "packet":str(fly),
-                            "time":(time.time())}                  
+                            "time":(time.time())}
             else :
                 application_layer_protocol="NOT HTTP"
                 print "IPv4 UDP NOT HTTP"
@@ -116,7 +116,7 @@ def flypaper(fly):
                     "transport_layer_protocol":transport_layer_protocol},
                     "packet":str(fly),
                     "time":(time.time())
-                    }    
+                    }
     elif type==0x86dd :
         version=fly[IPv6].version
         tc=fly[IPv6].tc
@@ -155,14 +155,14 @@ def flypaper(fly):
                 else:
                     temphttp=str(fly[Raw])
                     url=(temphttp.split(' '))[2]
-                    print "IPv6 TCP HTTP"     
+                    print "IPv6 TCP HTTP"
                     return {"protocol":"HTTP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                             "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
                             "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                             "application_layer_protocol":application_layer_protocol,"url":url},
                             "packet":str(fly),
-                            "time":(time.time())}  
+                            "time":(time.time())}
             else :
                 application_layer_protocol="NOT HTTP"
                 print "IPv6 TCP NOT HTTP"
@@ -194,7 +194,7 @@ def flypaper(fly):
                             "time":(time.time())}
                 else:
                     temphttp=str(fly[Raw])
-                    url=(temphttp.split(' '))[2]  
+                    url=(temphttp.split(' '))[2]
                     print "IPv6 UDP HTTP"
                     return {"protocol":"HTTP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
@@ -237,14 +237,14 @@ def flypaper(fly):
                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                 "hwtype":hwtype,"ptype":ptype,"hwlen":hwlen,"plen": plen,"op":op,"hwsrc":hwsrc,"psrc":psrc,"hwdst":hwdst,"pdst":pdst},
                 "packet":str(fly),
-                "time":(time.time())}   
+                "time":(time.time())}
     else:
         network_layer_protocol="NOT IPv4,IPv6,ARP"
         print  "NOT IPv4,IPv6,ARP"
         return {"protocol":"ETHERNET",
                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type},
                 "packet":str(fly),
-                "time":(time.time())}                 
+                "time":(time.time())}
     ####</application layer>
     ###</transport layer>
     ##</network layer>
