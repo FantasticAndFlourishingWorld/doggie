@@ -16,7 +16,7 @@
     <title>数据包分析</title>
   </head>
   <body>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-default">
       <p class="navbar-text pull-right"><a href="#" class="navbar-link" data-toggle="modal" data-target=".help-modal-lg">帮助</a></p>
       <div class="modal fade help-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -37,6 +37,46 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" data-dismiss="modal">知道了</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="navbar-text pull-right"><a href="#" class="navbar-link" data-toggle="modal" data-target=".settings-modal-lg">设置</a></p>
+      <div class="modal fade settings-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+              </button>
+              <h3>设置</h3>
+            </div>
+            <div class="modal-body">
+              <div class="panel panel-default">
+                <div class="panel-heading">页面设置</div>
+                <div class="panel-body">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-info">主题切换</button>
+                    <button type="button" class="btn btn-info dropdown-toggle settings-theme" data-toggle="dropdown">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu theme-menu" role="menu"></ul>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input name="voice" class="settings-voice" type="checkbox">开启声音
+                    </label>
+                    <label>
+                      <input name="notice" class="settings-notice" type="checkbox">开启提醒
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">完成</button>
             </div>
           </div>
         </div>
@@ -141,6 +181,7 @@
         </div>
       </div>
     </div>
+    <script src="../javascripts/theme.js"></script>
     <script src="../javascripts/settings.js"></script>
   </body>
 </html>

@@ -55,7 +55,7 @@ function createWindow () {
     data.os.type = os.type();
     data.os.hostname = os.hostname();
     data.os.release = os.release();
-    data.os.arch = os.arch();
+    data.os.networkInterfaces = os.networkInterfaces();
     data.passwordKey = utils.readSettings('password_key');
     webContents.send('init', JSON.stringify(data));
   });
