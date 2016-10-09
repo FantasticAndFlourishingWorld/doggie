@@ -1,5 +1,5 @@
 var electron = require('electron');
-var PythonShell = require('python-shell');
+var PythonShell = require(__dirname + '/../javascripts/python-shell.js');
 
 var ipc = electron.ipcRenderer;
 
@@ -54,6 +54,7 @@ $(document).ready(function () {
 
   $('.start_sniff').click(function () {
     var pktCount = 0;
+    var bpf = $('input[name=filter-rule]').val();
     $loadingBtn = $(this).button('loading');
     $('.fixed-head-table-wrapper tbody').html('');
     state.pcaps = [];
@@ -64,7 +65,8 @@ $(document).ready(function () {
 
     sniffShell = new PythonShell('sniffer.py', {
       mode: "json",
-      scriptPath: __dirname + '/../py'
+      scriptPath: __dirname + '/../py',
+      args: [bpf]
     });
 
     sniffShell.on('message', function (pktObj) {
@@ -72,11 +74,10 @@ $(document).ready(function () {
       renderPcaps(state.page, state.perPage, state.pcaps, false);
     });
 
-    sniffShell.on('close', function (err) {
+    sniffShell.on('end', function (err) {
       if (err) {
         console.log(err);
       }
-      $loadingBtn.button('reset');
     });
 
     sniffShell.on('error', function (err) {
@@ -87,8 +88,10 @@ $(document).ready(function () {
   });
 
   $('.stop_sniff').click(function () {
-    sniffShell.emit('close');
-    sniffShell.end();
+    sniffShell.end(function () {});
+    $loadingBtn.button('reset');
+    // sniffShell.emit('end');
+    // $loadingBtn.button('reset');
   });
 
   function readFile (wrapId) {
@@ -119,7 +122,7 @@ $(document).ready(function () {
           renderPcaps(state.page, state.perPage, state.pcaps, true);
         });
 
-        rdpcapShell.on('close', function (err) {
+        rdpcapShell.on('end', function (err) {
           if (err) {
             console.log(err);
           }
