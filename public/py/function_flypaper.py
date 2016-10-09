@@ -264,5 +264,5 @@ def flypaper(fly):
     ###</transport layer>
     ##</network layer>
     #</ether layer>
-fly=sniff(count=1)
-print flypaper(fly[0])
+#fly=sniff(count=1)
+#print flypaper(fly[0])
