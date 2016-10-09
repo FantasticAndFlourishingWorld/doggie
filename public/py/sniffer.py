@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
 import sys
+import json
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from db import SQLite
 from function_flypaper import flypaper
 
-sniff_count = 0
 sq = SQLite("PACKET")
 keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME"]
 
 def sniff_callback(pkt):
     """Show packet"""
     global keys, sniff_count, sq
-    sniff_count += 1
-    # print sniff_count
 
     pktObj = flypaper(pkt)
     stime = str(pktObj.get('time', "0"))
@@ -27,11 +27,24 @@ def sniff_callback(pkt):
     dmac = "'" + result.get('MAC_dst', "") + "'"
     pktlen = str(result.get('len', "0"))
 
+    print json.dumps({
+        "STIME": stime,
+        "PROTOCOL": pktObj['protocol'],
+        "SPORT": sport,
+        "DPORT": dport,
+        "SIP": result.get('IP_src', ""),
+        "DIP": result.get('IP_dst', ""),
+        "SMAC": result.get('MAC_src', ""),
+        "DMAC": result.get('MAC_dst', ""),
+        "PKTLEN": pktlen
+    })
     sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime])
 
 def sniff_index(sniff_prn):
     """The index of the sniff module"""
-    sniff(prn=sniff_callback, count=10, store=0)
+    sniff(prn=sniff_callback, store=0)
 
 if __name__ == '__main__':
+    sq.createTable()
     sniff_index(sniff_callback)
+    exit(0)
