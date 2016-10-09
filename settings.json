@@ -1,13 +1,13 @@
 {
   "voice": false,
-  "notice": false,
+  "notice": true,
   "theme": [
     "lumen",
     "yeti",
     "darkly",
     "slate"
   ],
-  "themeIndex": 2,
+  "themeIndex": 0,
   "password_key": "ffworld",
   "blacklist": [],
   "bpf": [

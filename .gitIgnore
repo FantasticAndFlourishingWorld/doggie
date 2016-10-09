@@ -1,5 +1,7 @@
 node_modules/
+database/*.db
 .DS_Store
 .DS_Store?
 bundle.js
 .pcap
+public/py/*.pyc

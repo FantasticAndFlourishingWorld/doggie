@@ -4,7 +4,7 @@
   "description": "The client of sniff application",
   "main": "index.js",
   "scripts": {
-    "rebuild": "electron-rebuild -f -w url crypto"
+    "rebuild": "electron-rebuild"
   },
   "repository": {
     "type": "git",
@@ -21,11 +21,16 @@
   },
   "homepage": "https://github.com/FantasticAndFlourishingWorld/sniff-app-client#readme",
   "dependencies": {
+    "amqplib": "^0.4.2",
     "animate.css": "^3.5.2",
     "bootstrap": "^3.3.7",
     "evilscan": "^1.0.2",
     "jquery": "^3.1.1",
-    "nconf": "^0.8.4"
+    "lodash": "^4.16.4",
+    "nconf": "^0.8.4",
+    "python-shell": "^0.4.0",
+    "python.js": "^0.5.0",
+    "sqlite3": "^3.1.6"
   },
   "devDependencies": {
     "mockjs": "^1.0.1-beta3"
