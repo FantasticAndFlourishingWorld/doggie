@@ -27,8 +27,8 @@ function createWindow () {
 
   mainWindow = new BrowserWindow({
     title: 'Snifff',
-    width: 1024,
-    height: 768
+    width: 1200,
+    height: 800
   });
   mainWindow.loadURL(`file://${__dirname}/public/html/index.html`);
 
@@ -62,6 +62,10 @@ function createWindow () {
 
   mainWindow.on('closed', function () {
     mainWindow = null;
+  });
+
+  ipc.on('encrypt-old-password', function (event, password) {
+    event.sender.send('encrypt-old-password-done', crypto.createHash('md5').update(password).digest('hex'));
   });
 
   ipc.on('encrypt-password', function (event, password) {

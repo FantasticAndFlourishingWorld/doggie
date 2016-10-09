@@ -18,7 +18,8 @@ class SQLite():
             DMAC TEXT,
             SIP TEXT,
             DIP TEXT,
-            STIME INTEGER
+            STIME INTEGER,
+            PLEN INTEGER
             );''')
 
         conn.close()
@@ -68,10 +69,3 @@ class SQLite():
         conn.execute("DELETE FROM " + self.dbName + " WHERE " + op + ";")
         conn.commit()
         conn.close()
-
-if __name__ == "__main__":
-    # make sure that when value's type is TEXT, you should make it like "'192.168.1.1'"!
-    db = SQLite("PACKET")
-    keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME"]
-    data = db.selectData(keys)
-    print data
