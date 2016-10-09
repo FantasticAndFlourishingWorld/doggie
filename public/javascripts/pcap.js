@@ -1,15 +1,11 @@
 var electron = require('electron');
 var cp = require('child_process');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('../../database/packet.db');
+var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
 
 var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
-
-  db.all('SELECT * FROM PACKET', function (err, rows) {
-    console.dir(rows);
-  });
 
   var state = {
     page: 1,
@@ -19,8 +15,11 @@ $(document).ready(function () {
 
   ipc.on('init', function (event, data) {
     data = JSON.parse(data);
-    state.pcaps = data.pcaps;
-    renderPcaps(state.page, state.perPage, data.pcaps);
+    db.all('SELECT * FROM PACKET', function (err, rows) {
+      data.pcaps = rows;
+      state.pcaps = data.pcaps;
+      renderPcaps(state.page, state.perPage, data.pcaps);
+    });
   });
 
   $('.btn-clear-filter-rule').click(function () {
@@ -114,18 +113,28 @@ function readFile (wrapId) {
 
 function renderPcaps (page, perPage, pcaps) {
   var protocolClasset = {
-    'http': 'success',
-    'mailto': 'warning',
-    'tcp': 'info'
+    'HTTP': 'success',
+    'ARP': 'warning',
+    // 'TCP': 'info'
   };
   var $wrapper = $('.fixed-head-table-wrapper tbody');
   $wrapper.html('');
   for (var i = (page - 1) * perPage, len = Math.min(pcaps.length, page * perPage); i < len; ++i) {
-    var node = '<tr class="' + (protocolClasset[pcaps[i].protocol] || '') + '">';
+    var node = '<tr class="' + (protocolClasset[pcaps[i].PROTOCOL] || '') + '">';
+    var pcap = pcaps[i];
+    var info = '详细信息';
     node += '<td>' + (i + 1) + '</td>';
-    node += '<td>' + pcaps[i].srcIp + '</td>';
-    node += '<td>' + pcaps[i].dstIp + '</td>';
-    node += '<td>' + pcaps[i].protocol + '</td>';
+    node += '<td>' + (pcap.SMAC || '-') + '</td>';
+    node += '<td>' + (pcap.DMAC || '-') + '</td>';
+    node += '<td>' + (pcap.SPORT || '-') + '</td>';
+    node += '<td>' + (pcap.DPORT || '-') + '</td>';
+    node += '<td>' + (pcap.SIP || '-') + '</td>';
+    node += '<td>' + (pcap.DIP || '-') + '</td>';
+    node += '<td>' + pcap.PROTOCOL + '</td>';
+    node += '<td><a href="#" tabindex="0" class="btn btn-xs btn-success" role="button" data-toggle="popover" data-trigger="focus" title="info" data-content="' +
+      // pcap.INFO +
+      info +
+      '">查看</a></td>';
     node += '</tr>';
     $wrapper.append(node);
   }

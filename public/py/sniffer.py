@@ -34,4 +34,5 @@ def sniff_index(sniff_prn):
     sniff(prn=sniff_callback, count=10, store=0)
 
 if __name__ == '__main__':
+    sq.createTable()
     sniff_index(sniff_callback)

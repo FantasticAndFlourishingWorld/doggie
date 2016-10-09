@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
 import sqlite3
+import os
 
 class SQLite():
     def __init__(self, dbName):
         self.dbName = dbName
-        self.dbPath = "../../database/" + dbName.lower() + ".db"
+        self.dbPath = os.getcwd() + "/database/" + dbName.lower() + ".db"
 
     def createTable(self):
         conn = sqlite3.connect(self.dbPath)
-        conn.execute('''CREATE TABLE ''' + self.dbName + '''
+        conn.execute('''CREATE TABLE IF NOT EXISTS ''' + self.dbName + '''
             (PROTOCOL TEXT NOT NULL,
             SPORT INTEGER,
             DPORT INTEGER,
