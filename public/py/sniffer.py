@@ -9,14 +9,14 @@ from db import SQLite
 from function_flypaper import flypaper
 
 sq = SQLite("PACKET")
-keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME"]
+keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME", "PLEN"]
 
 def sniff_callback(pkt):
     """Show packet"""
     global keys, sniff_count, sq
 
     pktObj = flypaper(pkt)
-    stime = str(pktObj.get('time', "0"))
+    stime = str(int(pktObj.get('time', 0) * 1000))
     protocol = "'" + pktObj['protocol'] + "'"
     result = pktObj['result']
     sport = str(result.get('sport', "0"))
@@ -25,7 +25,7 @@ def sniff_callback(pkt):
     dip = "'" + result.get('IP_dst', "") + "'"
     smac = "'" + result.get('MAC_src', "") + "'"
     dmac = "'" + result.get('MAC_dst', "") + "'"
-    pktlen = str(result.get('len', "0"))
+    pktlen = str(pktObj.get('length', "0"))
 
     print json.dumps({
         "STIME": stime,
@@ -38,7 +38,7 @@ def sniff_callback(pkt):
         "DMAC": result.get('MAC_dst', ""),
         "PKTLEN": pktlen
     })
-    sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime])
+    sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime, pktlen])
 
 def sniff_index(sniff_prn):
     """The index of the sniff module"""

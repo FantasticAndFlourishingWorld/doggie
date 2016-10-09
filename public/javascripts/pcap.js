@@ -1,7 +1,5 @@
 var electron = require('electron');
 var PythonShell = require('python-shell');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
 
 var ipc = electron.ipcRenderer;
 
@@ -51,7 +49,7 @@ $(document).ready(function () {
 
   readFile('drop-file');
 
-  var pyshell = null;
+  var sniffShell = null;
   var $loadingBtn = null;
 
   $('.start_sniff').click(function () {
@@ -59,25 +57,29 @@ $(document).ready(function () {
     $loadingBtn = $(this).button('loading');
     $('.fixed-head-table-wrapper tbody').html('');
     state.pcaps = [];
+    state.page = 1;
+    $('.page-current').html(state.page);
+    $('.page-all').html(state.page);
+    $('input[name=page-number]').val(1);
 
-    pyshell = new PythonShell('sniffer.py', {
+    sniffShell = new PythonShell('sniffer.py', {
       mode: "json",
       scriptPath: __dirname + '/../py'
     });
 
-    pyshell.on('message', function (pktObj) {
+    sniffShell.on('message', function (pktObj) {
       state.pcaps.unshift(pktObj);
       renderPcaps(state.page, state.perPage, state.pcaps, false);
     });
 
-    pyshell.on('end', function (err) {
+    sniffShell.on('close', function (err) {
       if (err) {
         console.log(err);
       }
       $loadingBtn.button('reset');
     });
 
-    pyshell.on('error', function (err) {
+    sniffShell.on('error', function (err) {
       alert(err);
       $loadingBtn.button('reset');
     });
@@ -85,45 +87,54 @@ $(document).ready(function () {
   });
 
   $('.stop_sniff').click(function () {
-    pyshell.emit('end');
-    pyshell.end();
+    sniffShell.emit('close');
+    sniffShell.end();
   });
 
+  function readFile (wrapId) {
+    var holder = document.getElementById(wrapId);
+    holder.ondragover = function () {
+      return false;
+    };
+    holder.ondragleave = holder.ondragend = function () {
+      return false;
+    };
+    holder.ondrop = function (e) {
+      e.preventDefault();
+      var file = e.dataTransfer.files[0];
+      if (!file.name.endsWith('.pcap')) {
+        $('p', holder).html('只能解析pcap文件');
+        setTimeout(function () {
+          $('p', holder).html('将数据包文件拖拽到此处解析');
+        }, 1800);
+      } else {
+        var rdpcapShell = new PythonShell('read_pcap.py', {
+          mode: "json",
+          scriptPath: __dirname + '/../py',
+          args: [file.path]
+        });
+
+        rdpcapShell.on('message', function (pkts) {
+          state.pcaps = pkts.pkts;
+          renderPcaps(state.page, state.perPage, state.pcaps, true);
+        });
+
+        rdpcapShell.on('close', function (err) {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        rdpcapShell.on('error', function (err) {
+          alert(err);
+        });
+      }
+
+      return false;
+    };
+  }
+
 });
-
-function readFile (wrapId) {
-  var holder = document.getElementById(wrapId);
-  holder.ondragover = function () {
-    return false;
-  };
-  holder.ondragleave = holder.ondragend = function () {
-    return false;
-  };
-  holder.ondrop = function (e) {
-    e.preventDefault();
-    var file = e.dataTransfer.files[0];
-    if (!file.name.endsWith('.pcap')) {
-      $('p', holder).html('只能解析pcap文件');
-      setTimeout(function () {
-        $('p', holder).html('将数据包文件拖拽到此处解析');
-      }, 1800);
-    } else {
-      var rdpcap = cp.spawn('python', [__dirname + '/../py/read_pcap.py', file.path]);
-      rdpcap.stderr.setEncoding('utf8');
-      rdpcap.stderr.on('data', function (err) {
-        console.log(err);
-      });
-      rdpcap.stdout.on('data', function (data) {
-        console.log(data.toString());
-      });
-      rdpcap.on('exit', function (code) {
-        console.log('done');
-      });
-    }
-
-    return false;
-  };
-}
 
 function renderPcaps (page, perPage, pcaps, reRender) {
   var protocolClasset = {

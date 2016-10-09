@@ -27,6 +27,7 @@
     "evilscan": "^1.0.2",
     "jquery": "^3.1.1",
     "lodash": "^4.16.4",
+    "moment": "^2.15.1",
     "nconf": "^0.8.4",
     "python-shell": "^0.4.0",
     "python.js": "^0.5.0",

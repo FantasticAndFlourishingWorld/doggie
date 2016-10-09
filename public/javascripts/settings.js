@@ -12,10 +12,11 @@ $(document).ready(function () {
 
   var passwordKey = utils.readSettings('password_key');
   var curPassword = window.localStorage.getItem(passwordKey);
+  var password = '';
 
   $('.settings-password-submit').click(function () {
     var oldPassword = $('input[name=settings-old-password]').val();
-    var password = $('input[name=settings-password]').val();
+    password = $('input[name=settings-password]').val();
 
     $('.settings-password-alert-danger').hide();
     $('.settings-password-alert-success').hide();
@@ -28,7 +29,7 @@ $(document).ready(function () {
         .delay(2000)
         .hide(300);
     } else {
-      ipc.send('encrypt-password', oldPassword);
+      ipc.send('encrypt-old-password', oldPassword);
     }
   });
 
@@ -155,10 +156,23 @@ $(document).ready(function () {
   $('.settings-blacklist-delete').click(removeUrl);
   $('.settings-bpf-delete').click(removeBPF);
 
-  ipc.on('encrypt-password-done', function (event, passwordHash) {
+  ipc.on('encrypt-old-password-done', function (event, passwordHash) {
     if (passwordHash !== curPassword) {
       $('.settings-password-alert-danger')
         .html('请输入正确的旧密码')
+        .stop(true, true)
+        .show(300)
+        .delay(2000)
+        .hide(300);
+    } else {
+      ipc.send('encrypt-password', password);
+    }
+  });
+
+  ipc.on('encrypt-password-done', function (event, passwordHash) {
+    if (passwordHash === curPassword) {
+      $('.settings-password-alert-danger')
+        .html('新密码不能与旧密码相同')
         .stop(true, true)
         .show(300)
         .delay(2000)
