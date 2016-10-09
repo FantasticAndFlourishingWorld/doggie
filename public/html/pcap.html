@@ -133,8 +133,13 @@
               </table>
             </div>
             <div class="panel-footer">
-              <button type="button" class="previous btn btn-info">&larr; 上一页</button>
-              <button type="button" class="next btn btn-info">下一页 &rarr;</button>
+              <form class="form-inline" role="form">
+                <button type="button" class="previous btn btn-info">&larr; 上一页</button>
+                第<span class="page-current"></span>页/共<span class="page-all"></span>页
+                <input type="number" min="1" max="1" class="form-control form-horizental page-number" name="page-number" placeholder="">
+                <button type="button" class="btn btn-info btn-page-dump">跳转</button>
+                <button type="button" class="next btn btn-info">下一页 &rarr;</button>
+              </form>
             </div>
           </div>
         </div>

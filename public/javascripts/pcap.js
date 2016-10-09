@@ -1,5 +1,5 @@
 var electron = require('electron');
-var cp = require('child_process');
+var PythonShell = require('python-shell');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
 
@@ -14,12 +14,13 @@ $(document).ready(function () {
   };
 
   ipc.on('init', function (event, data) {
-    data = JSON.parse(data);
-    db.all('SELECT * FROM PACKET', function (err, rows) {
-      data.pcaps = rows;
-      state.pcaps = data.pcaps;
-      renderPcaps(state.page, state.perPage, data.pcaps);
-    });
+    // data = JSON.parse(data);
+    // db.all('SELECT * FROM PACKET', function (err, rows) {
+    //   data.pcaps = rows;
+    //   state.pcaps = data.pcaps;
+    //   renderPcaps(state.page, state.perPage, data.pcaps, false);
+    // });
+    $('input[name=page-number]').val(1);
   });
 
   $('.btn-clear-filter-rule').click(function () {
@@ -29,50 +30,63 @@ $(document).ready(function () {
   $('.previous').click(function () {
     if (state.page > 1) {
       state.page -= 1;
-      renderPcaps(state.page, state.perPage, state.pcaps);
+      renderPcaps(state.page, state.perPage, state.pcaps, true);
     }
   });
 
   $('.next').click(function () {
-    if (state.page < state.pcaps.length / state.perPage) {
+    if (state.page < Math.ceil(state.pcaps.length / state.perPage)) {
       state.page += 1;
-      renderPcaps(state.page, state.perPage, state.pcaps);
+      renderPcaps(state.page, state.perPage, state.pcaps, true);
+    }
+  });
+
+  $('.btn-page-dump').click(function () {
+    var p = parseInt($('input[name=page-number]').val(), 10);
+    if (p > 0) {
+      state.page = p;
+      renderPcaps(state.page, state.perPage, state.pcaps, true);
     }
   });
 
   readFile('drop-file');
 
-  var sniffer = null;
+  var pyshell = null;
   var $loadingBtn = null;
 
   $('.start_sniff').click(function () {
     var pktCount = 0;
-    if (!sniffer) {
-      $loadingBtn = $(this).button('loading');
-      sniffer = cp.spawn('python', [__dirname + '/../py/sniffer.py', $('.filter-rule').val()]);
+    $loadingBtn = $(this).button('loading');
+    $('.fixed-head-table-wrapper tbody').html('');
+    state.pcaps = [];
 
-      sniffer.stderr.setEncoding('utf8');
-      sniffer.stderr.on('data', function (err) {
+    pyshell = new PythonShell('sniffer.py', {
+      mode: "json",
+      scriptPath: __dirname + '/../py'
+    });
+
+    pyshell.on('message', function (pktObj) {
+      state.pcaps.unshift(pktObj);
+      renderPcaps(state.page, state.perPage, state.pcaps, false);
+    });
+
+    pyshell.on('end', function (err) {
+      if (err) {
         console.log(err);
-      });
-      sniffer.stdout.on('data', function (data) {
-        console.log(data.toString());
-        pktCount += 1;
-        $('.pkt-count').html('已抓取到' + pktCount + '个数据包');
-      });
-      sniffer.on('exit', function (code) {
-        $('.pkt-count').html('');
-        // console.log('exit' + code);
-      });
-    }
+      }
+      $loadingBtn.button('reset');
+    });
+
+    pyshell.on('error', function (err) {
+      alert(err);
+      $loadingBtn.button('reset');
+    });
+
   });
 
   $('.stop_sniff').click(function () {
-    if (sniffer) {
-      sniffer.kill();
-      sniffer = null;
-    }
-    $loadingBtn.button('reset');
+    pyshell.emit('end');
+    pyshell.end();
   });
 
 });
@@ -111,14 +125,17 @@ function readFile (wrapId) {
   };
 }
 
-function renderPcaps (page, perPage, pcaps) {
+function renderPcaps (page, perPage, pcaps, reRender) {
   var protocolClasset = {
     'HTTP': 'success',
-    'ARP': 'warning',
-    // 'TCP': 'info'
+    'ARP': 'danger',
+    'IPv6': 'warning'
   };
+  var pageNumber = Math.ceil(pcaps.length / perPage);
   var $wrapper = $('.fixed-head-table-wrapper tbody');
   $wrapper.html('');
+  $('.page-current').html('');
+  $('.page-all').html('');
   for (var i = (page - 1) * perPage, len = Math.min(pcaps.length, page * perPage); i < len; ++i) {
     var node = '<tr class="' + (protocolClasset[pcaps[i].PROTOCOL] || '') + '">';
     var pcap = pcaps[i];
@@ -126,27 +143,35 @@ function renderPcaps (page, perPage, pcaps) {
     node += '<td>' + (i + 1) + '</td>';
     node += '<td>' + (pcap.SMAC || '-') + '</td>';
     node += '<td>' + (pcap.DMAC || '-') + '</td>';
-    node += '<td>' + (pcap.SPORT || '-') + '</td>';
-    node += '<td>' + (pcap.DPORT || '-') + '</td>';
+    node += '<td>' + (pcap.SPORT !== '0' ? pcap.SPORT : '-') + '</td>';
+    node += '<td>' + (pcap.DPORT !== '0' ? pcap.DPORT : '-') + '</td>';
     node += '<td>' + (pcap.SIP || '-') + '</td>';
     node += '<td>' + (pcap.DIP || '-') + '</td>';
     node += '<td>' + pcap.PROTOCOL + '</td>';
-    node += '<td><a href="#" tabindex="0" class="btn btn-xs btn-success" role="button" data-toggle="popover" data-trigger="focus" title="info" data-content="' +
+    node += '<td><a href="#" tabindex="0" class="btn btn-xs btn-default" role="button" data-toggle="popover" data-trigger="focus" title="info" data-content="' +
       // pcap.INFO +
       info +
       '">查看</a></td>';
     node += '</tr>';
     $wrapper.append(node);
   }
-  $wrapper.hide().show(200);
+
+  if (reRender) {
+    $wrapper.hide().show(200);
+  }
+
   if (page === 1) {
     $('.previous').addClass('disabled');
   } else {
     $('.previous').removeClass('disabled');
   }
-  if (page === pcaps.length / perPage) {
+  if (page === pageNumber) {
     $('.next').addClass('disabled');
   } else {
     $('.next').removeClass('disabled');
   }
+  $('input[name=page-number]').attr('max', pageNumber);
+  $('input[name=page-number]').val(parseInt(page, 10));
+  $('.page-current').html(page);
+  $('.page-all').html(pageNumber);
 }
