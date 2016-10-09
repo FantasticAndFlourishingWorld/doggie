@@ -41,10 +41,6 @@ $(document).ready(function () {
       },
       toolbox: {
         feature: {
-          dataZoom: {
-            yAxisIndex: 'none'
-          },
-          restore: {},
           saveAsImage: {}
         }
       },
@@ -74,8 +70,22 @@ $(document).ready(function () {
           show: false
         }
       },
+      dataZoom: [
+        {
+          show: true,
+          realtime: true,
+          start: 65,
+          end: 85
+        },
+        {
+          type: 'inside',
+          realtime: true,
+          start: 65,
+          end: 85
+        }
+      ],
       series: [{
-        name: '流量',
+        name: '流量(byte)',
         type: 'line',
         smooth: true,
         symbol: 'none',

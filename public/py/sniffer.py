@@ -40,11 +40,11 @@ def sniff_callback(pkt):
     })
     sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime, pktlen])
 
-def sniff_index(sniff_prn):
+def sniff_index(sniff_prn, bpf):
     """The index of the sniff module"""
-    sniff(prn=sniff_callback, store=0)
+    sniff(prn=sniff_callback, store=0, filter=bpf)
 
 if __name__ == '__main__':
     sq.createTable()
-    sniff_index(sniff_callback)
+    sniff_index(sniff_callback, sys.argv[1] if len(sys.argv) > 1 else None)
     exit(0)
