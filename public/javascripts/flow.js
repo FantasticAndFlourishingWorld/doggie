@@ -1,10 +1,11 @@
 var moment = require('moment');
+var utils = require(__dirname + '/../javascripts/utils.js');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
 
 $(document).ready(function () {
 
-  var lenChart = echarts.init(document.getElementById('lenChart'));
+  var lenChart = echarts.init(document.getElementById('lenChart'), 'dark');
   var pktLenData = [];
   var pktNumData = [];
 

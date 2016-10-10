@@ -32,7 +32,12 @@
     "sqlite3": "^3.1.6"
   },
   "devDependencies": {
+    "del": "^2.2.2",
     "electron-rebuild": "^1.2.1",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^2.0.0",
     "mockjs": "^1.0.1-beta3"
   }
 }
