@@ -131,8 +131,8 @@ def flypaper(fly):
             plen=fly[IPv6].plen#payload length (16)
             nh=fly[IPv6].nh#next header,protocol of transport layer (8)
             hlim=fly[IPv6].hlim#hop limit (8)
-            IPv6_src=fly[IPv6].src# (128)
-            IPv6_dst=fly[IPv6].dst# (128)
+            IP_src=fly[IPv6].src# (128)
+            IP_dst=fly[IPv6].dst# (128)
             ###<transport layer>
             if nh==0x06:
                 sport=fly[TCP].sport# (16)
@@ -154,7 +154,7 @@ def flypaper(fly):
                         strfly=str(fly)      
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
+                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                                 "url":url},
                                 "packet":strfly,
@@ -167,7 +167,7 @@ def flypaper(fly):
                         strfly=str(fly)      
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
+                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                                 "url":url},
                                 "packet":strfly,
@@ -178,7 +178,7 @@ def flypaper(fly):
                     strfly=str(fly)      
                     return {"protocol":"TCP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                            "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
+                            "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                             "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr},
                             "packet":strfly,
                             "time":(time.time()),
@@ -197,7 +197,7 @@ def flypaper(fly):
                         strfly=str(fly)      
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
+                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"len":len,"chksum":chksum,
                                 "url":url},
                                 "packet":strfly,
@@ -210,7 +210,7 @@ def flypaper(fly):
                         strfly=str(fly)      
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
+                                "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"len":len,"chksum":chksum,
                                 "url":url},
                                 "packet":strfly,
@@ -221,7 +221,7 @@ def flypaper(fly):
                     strfly=str(fly)      
                     return {"protocol":"UDP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                            "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst,
+                            "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                             "sport":sport,"dport":dport,"len":len,"chksum":chksum},
                             "packet":strfly,
                             "time":(time.time()),
@@ -231,7 +231,7 @@ def flypaper(fly):
                 strfly=str(fly)      
                 return {"protocol":"IPv6",
                         "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                        "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IPv6_src":IPv6_src,"IPv6_dst":IPv6_dst},
+                        "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst},
                         "packet":strfly,
                         "time":(time.time()),
                         "length":strfly.__sizeof__()}
