@@ -151,6 +151,7 @@ $(document).ready(function () {
     };
 
     lenChart.setOption(lenOption);
+    db.close();
 
   });
 
