@@ -10,9 +10,7 @@ $(document).ready(function () {
   var state = {
     page: 1,
     perPage: 10,
-    pcaps: [],
-    xData: [],
-    viewNum: 30
+    pcaps: []
   };
 
   ipc.on('init', function (event, data) {

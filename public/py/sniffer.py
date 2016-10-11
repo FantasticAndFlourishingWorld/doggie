@@ -13,9 +13,12 @@ keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME", "PL
 
 def sniff_callback(pkt):
     """Show packet"""
-    global keys, sniff_count, sq
+    global keys, sq
 
     pktObj = flypaper(pkt)
+    if not pktObj:
+        return None
+
     stime = str(int(pktObj.get('time', 0) * 1000))
     protocol = "'" + pktObj['protocol'] + "'"
     result = pktObj['result']

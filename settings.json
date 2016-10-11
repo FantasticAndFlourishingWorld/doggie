@@ -1,15 +1,17 @@
 {
   "voice": false,
-  "notice": true,
+  "notice": false,
   "theme": [
     "lumen",
     "yeti",
     "darkly",
     "slate"
   ],
-  "themeIndex": 3,
+  "themeIndex": 2,
   "password_key": "ffworld",
-  "blacklist": [],
+  "blacklist": [
+    "www.baidu.com"
+  ],
   "bpf": [
     {
       "name": "yanran",
