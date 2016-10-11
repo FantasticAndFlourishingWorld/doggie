@@ -6,6 +6,8 @@ var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
 
+  var ip = null;
+
   if (utils.readSettings('notice')) {
     Notification.requestPermission(function (status) {
       if (Notification.permission !== status) {
@@ -19,7 +21,14 @@ $(document).ready(function () {
     data = JSON.parse(data);
     renderOs(data.os);
     initSettings();
-    initPassword(data.passwordKey);
+    for (var dev in data.os.networkInterfaces) {
+      data.os.networkInterfaces[dev].forEach(function (details) {
+        if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
+          ip = details.address;
+        }
+      });
+    }
+    // initPassword(data.passwordKey);
   });
 
   ipc.on('global-shortcut', function (event, key) {
@@ -48,38 +57,56 @@ $(document).ready(function () {
   });
 
   $('.scan-btn').click(function () {
+    var target = null;
+    var concurrency = 60000;
+    var timeout = 100;
+    if ($(this).hasClass('disabled')) {
+      return;
+    }
+    if ($(this).hasClass('scan-btn-localhost')) {
+      target = '127.0.0.1';
+      concurrency = 60000;
+      timeout = 100;
+    } else if ($(this).hasClass('scan-btn-ip')) {
+      target = ip;
+      concurrency = 60000;
+      timeout = 100;
+    } else {
+      target = '192.168.1.1';
+      concurrency = 30000;
+      timeout = 5000;
+    }
     var options = {
-        target: '127.0.0.1',
-        port: '1-65535',
-        concurrency: 60000,
-        timeout: 100,
-        // status: 'O', // Timeout, Refused, Open, Unreachable
-        banner: true
+      target: target,
+      port: '0-65535',
+      concurrency: concurrency,
+      timeout: timeout,
+      status: 'TROU',
+      banner: true
     };
 
     var scanner = new evilscan(options);
 
     $('.scanned-ports').html('');
-    $('.scan-btn').html('扫描中').addClass('disabled');
+    $('.scan-btn').addClass('disabled');
 
     scanner.on('result',function(data) {
-      // fired when item is matching options
       if (data.status === 'open') {
         $('.scanned-ports').append('<span class="label label-success scanned-port">' + data.port + '</span>');
       }
     });
 
     scanner.on('error',function(err) {
+      $('.scan-btn').removeClass('disabled');
+      scanner = null;
       throw new Error(data.toString());
     });
 
     scanner.on('done',function() {
-      // finished !
-      console.log(new Date() - m + 'ms');
-      $('.scan-btn').html('开始扫描').removeClass('disabled');
+      $('.scan-btn').removeClass('disabled');
+      scanner = null;
     });
 
-    var m = new Date();
     scanner.run();
   });
 

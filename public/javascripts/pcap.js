@@ -1,4 +1,6 @@
 var electron = require('electron');
+var moment = require('moment');
+var sqlite3 = require('sqlite3').verbose();
 var PythonShell = require(__dirname + '/../javascripts/python-shell.js');
 
 var ipc = electron.ipcRenderer;
@@ -8,7 +10,9 @@ $(document).ready(function () {
   var state = {
     page: 1,
     perPage: 10,
-    pcaps: []
+    pcaps: [],
+    xData: [],
+    viewNum: 30
   };
 
   ipc.on('init', function (event, data) {
@@ -39,6 +43,15 @@ $(document).ready(function () {
     }
   });
 
+  $('.see-history').click(function () {
+    var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
+    db.all('SELECT * FROM PACKET ORDER BY STIME ASC', function (err, rows) {
+      state.pcaps = rows;
+      renderPcaps(state.page, state.perPage, state.pcaps, true);
+      db.close();
+    });
+  });
+
   $('.btn-page-dump').click(function () {
     var p = parseInt($('input[name=page-number]').val(), 10);
     if (p > 0) {
@@ -52,7 +65,7 @@ $(document).ready(function () {
   var sniffShell = null;
   var $loadingBtn = null;
 
-  $('.start_sniff').click(function () {
+  $('.start-sniff').click(function () {
     var pktCount = 0;
     var bpf = $('input[name=filter-rule]').val();
     $loadingBtn = $(this).button('loading');
@@ -87,11 +100,9 @@ $(document).ready(function () {
 
   });
 
-  $('.stop_sniff').click(function () {
+  $('.stop-sniff').click(function () {
     sniffShell.end(function () {});
     $loadingBtn.button('reset');
-    // sniffShell.emit('end');
-    // $loadingBtn.button('reset');
   });
 
   function readFile (wrapId) {
@@ -143,7 +154,8 @@ function renderPcaps (page, perPage, pcaps, reRender) {
   var protocolClasset = {
     'HTTP': 'success',
     'ARP': 'danger',
-    'IPv6': 'warning'
+    'IPv6': 'warning',
+    'IPv4': 'warning'
   };
   var pageNumber = Math.ceil(pcaps.length / perPage);
   var $wrapper = $('.fixed-head-table-wrapper tbody');
@@ -154,7 +166,7 @@ function renderPcaps (page, perPage, pcaps, reRender) {
     var node = '<tr class="' + (protocolClasset[pcaps[i].PROTOCOL] || '') + '">';
     var pcap = pcaps[i];
     var info = '详细信息';
-    node += '<td>' + (i + 1) + '</td>';
+    node += '<td>' + moment(new Date(parseInt(pcap.STIME, 10))).format('GGGG.MM.D H:mm:ss') + '</td>';
     node += '<td>' + (pcap.SMAC || '-') + '</td>';
     node += '<td>' + (pcap.DMAC || '-') + '</td>';
     node += '<td>' + (pcap.SPORT !== '0' ? pcap.SPORT : '-') + '</td>';
@@ -162,10 +174,6 @@ function renderPcaps (page, perPage, pcaps, reRender) {
     node += '<td>' + (pcap.SIP || '-') + '</td>';
     node += '<td>' + (pcap.DIP || '-') + '</td>';
     node += '<td>' + pcap.PROTOCOL + '</td>';
-    node += '<td><a href="#" tabindex="0" class="btn btn-xs btn-default" role="button" data-toggle="popover" data-trigger="focus" title="info" data-content="' +
-      // pcap.INFO +
-      info +
-      '">查看</a></td>';
     node += '</tr>';
     $wrapper.append(node);
   }

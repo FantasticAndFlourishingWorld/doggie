@@ -107,9 +107,10 @@
               <form class="form-inline" role="form">
                 <div class="form-group">
                   <input type="text" class="form-control form-horizental filter-rule" name="filter-rule" placeholder="过滤规则(bpf)">
-                  <button type="button" class="btn btn-default btn-clear-filter-rule"><span class="glyphicon glyphicon-refresh"></span> 清空</button>
-                  <button type="button" class="btn btn-info start_sniff" data-loading-text="抓取中" audocomplete="off"><span class="glyphicon glyphicon-play"></span> 开始抓取</button>
-                  <button type="button" class="btn btn-danger stop_sniff"><span class="glyphicon glyphicon-pause"></span> 停止抓取</button>
+                  <button type="button" class="btn btn-default btn-clear-filter-rule"><span class="glyphicon glyphicon-refresh"></span>清空</button>
+                  <button type="button" class="btn btn-info start-sniff" data-loading-text="抓取中" audocomplete="off"><span class="glyphicon glyphicon-play"></span>开始抓取</button>
+                  <button type="button" class="btn btn-danger stop-sniff"><span class="glyphicon glyphicon-pause"></span>停止抓取</button>
+                  <button type="button" class="btn btn-danger see-history"><span class="glyphicon glyphicon-zoom-in"></span>查看历史数据</button>
                   <span class="pkt-count text-success"></span>
                 </div>
               </form>
@@ -118,7 +119,7 @@
               <table class="table table-hover table-condensed text-center">
                 <thead>
                   <tr>
-                    <td>数据包编号</td>
+                    <td>时间</td>
                     <td>发送mac</td>
                     <td>目的mac</td>
                     <td>发送端口</td>
@@ -126,7 +127,6 @@
                     <td>发送ip</td>
                     <td>目的ip</td>
                     <td>协议</td>
-                    <td>详细信息</td>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -145,6 +145,8 @@
         </div>
       </div>
     </div>
+    <script src="../javascripts/echarts.min.js"></script>
+    <script src="../../theme/dark.min.js"></script>
     <script src="../javascripts/theme.js"></script>
     <script src="../javascripts/pcap.js"></script>
   </body>
