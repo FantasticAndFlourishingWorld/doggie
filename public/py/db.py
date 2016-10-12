@@ -36,8 +36,6 @@ class SQLite():
         conn = sqlite3.connect(self.dbPath)
         keysStr = ','.join(keys).upper()
         valuesStr = ','.join(values).upper()
-        # print "INSERT INTO " + self.dbName + " (" + keysStr + ") \
-        # VALUES (" + valuesStr + ");"
         conn.execute("INSERT INTO " + self.dbName + " (" + keysStr + ") \
         VALUES (" + valuesStr + ");")
 

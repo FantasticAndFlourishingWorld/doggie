@@ -25,6 +25,7 @@ $(document).ready(function () {
         pacNum += 1;
       } else {
         var time = moment(new Date(row.STIME)).format('GGGG.MM.D H:mm:ss');
+        len = Math.round(len / 1024 * 100) / 100;
         pktLenData.push({
           time: time,
           value: len
@@ -114,7 +115,7 @@ $(document).ready(function () {
       ],
       yAxis : [
         {
-          name : '流量',
+          name : '流量(KB)',
           type : 'value',
           splitLine: {
             show: false

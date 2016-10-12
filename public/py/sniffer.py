@@ -19,19 +19,18 @@ def sniff_callback(pkt):
     if not pktObj:
         return None
 
-    stime = str(int(pktObj.get('time', 0) * 1000))
     protocol = "'" + pktObj['protocol'] + "'"
     result = pktObj['result']
-    sport = str(result.get('sport', "-"))
-    dport = str(result.get('dport', "-"))
+    sport = str(result.get('sport', "0"))
+    dport = str(result.get('dport', "0"))
     sip = "'" + result.get('IP_src', "") + "'"
     dip = "'" + result.get('IP_dst', "") + "'"
     smac = "'" + result.get('MAC_src', "") + "'"
     dmac = "'" + result.get('MAC_dst', "") + "'"
+    stime = str(int(pktObj.get('time', 0) * 1000))
     pktlen = str(pktObj.get('length', "0"))
 
     print json.dumps({
-        "STIME": stime,
         "PROTOCOL": pktObj['protocol'],
         "SPORT": sport,
         "DPORT": dport,
@@ -39,6 +38,7 @@ def sniff_callback(pkt):
         "DIP": result.get('IP_dst', ""),
         "SMAC": result.get('MAC_src', ""),
         "DMAC": result.get('MAC_dst', ""),
+        "STIME": stime,
         "PKTLEN": pktlen
     })
     sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime, pktlen])
@@ -48,7 +48,5 @@ def sniff_index(sniff_prn, bpf):
     sniff(prn=sniff_callback, store=0, filter=bpf)
 
 if __name__ == '__main__':
-    print json.dumps({'path': sys.argv[1] + "/database/packet.db"})
     sq.createTable()
     sniff_index(sniff_callback, sys.argv[2] if len(sys.argv) > 2 else None)
-    # exit(0)

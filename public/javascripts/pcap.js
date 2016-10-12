@@ -81,7 +81,6 @@ $(document).ready(function () {
     });
 
     sniffShell.on('message', function (pktObj) {
-      console.log(pktObj);
       state.pcaps.unshift(pktObj);
       renderPcaps(state.page, state.perPage, state.pcaps, false);
     });
@@ -93,7 +92,7 @@ $(document).ready(function () {
     });
 
     sniffShell.on('error', function (err) {
-      alert(err);
+      console.log(err);
       $loadingBtn.button('reset');
     });
 
