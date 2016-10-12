@@ -13,7 +13,7 @@ $(document).ready(function () {
 
   if (theme && themeIndex > -1) {
     var $themeMenu = $('.theme-menu');
-    var $themesheet = $('<link href="../../theme/' + theme[themeIndex] + '.min.css" rel="stylesheet" />');
+    var $themesheet = $('<link href="../../src/theme/' + theme[themeIndex] + '.min.css" rel="stylesheet" />');
     $('head').append($themesheet);
 
     for (var i = 0, len = theme.length; i < len; ++i) {
@@ -21,7 +21,7 @@ $(document).ready(function () {
     }
     $themeMenu.delegate('a', 'click', function () {
       utils.saveSettings('themeIndex', $themeMenu.find('a').index($(this)[0]));
-      $themesheet.attr('href', '../../theme/' + $(this).html() + '.min.css');
+      $themesheet.attr('href', '../../src/theme/' + $(this).html() + '.min.css');
     });
   }
 

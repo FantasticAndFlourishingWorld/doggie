@@ -8,7 +8,7 @@ from scapy.all import *
 from db import SQLite
 from function_flypaper import flypaper
 
-sq = SQLite("PACKET")
+sq = SQLite("PACKET", sys.argv[1])
 keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME", "PLEN"]
 
 def sniff_callback(pkt):
@@ -22,8 +22,8 @@ def sniff_callback(pkt):
     stime = str(int(pktObj.get('time', 0) * 1000))
     protocol = "'" + pktObj['protocol'] + "'"
     result = pktObj['result']
-    sport = str(result.get('sport', "0"))
-    dport = str(result.get('dport', "0"))
+    sport = str(result.get('sport', "-"))
+    dport = str(result.get('dport', "-"))
     sip = "'" + result.get('IP_src', "") + "'"
     dip = "'" + result.get('IP_dst', "") + "'"
     smac = "'" + result.get('MAC_src', "") + "'"
@@ -48,6 +48,7 @@ def sniff_index(sniff_prn, bpf):
     sniff(prn=sniff_callback, store=0, filter=bpf)
 
 if __name__ == '__main__':
+    print json.dumps({'path': sys.argv[1] + "/database/packet.db"})
     sq.createTable()
-    sniff_index(sniff_callback, sys.argv[1] if len(sys.argv) > 1 else None)
-    exit(0)
+    sniff_index(sniff_callback, sys.argv[2] if len(sys.argv) > 2 else None)
+    # exit(0)

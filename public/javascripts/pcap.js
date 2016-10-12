@@ -77,10 +77,11 @@ $(document).ready(function () {
     sniffShell = new PythonShell('sniffer.py', {
       mode: "json",
       scriptPath: __dirname + '/../py',
-      args: [bpf]
+      args: [__dirname, bpf]
     });
 
     sniffShell.on('message', function (pktObj) {
+      console.log(pktObj);
       state.pcaps.unshift(pktObj);
       renderPcaps(state.page, state.perPage, state.pcaps, false);
     });
