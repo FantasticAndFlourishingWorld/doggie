@@ -1,5 +1,5 @@
 var settings = require('nconf').file({
-  file: 'settings.json'
+  file: __dirname + '/../../settings.json'
 });
 
 function saveSettings(settingKey, settingValue) {

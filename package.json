@@ -29,6 +29,7 @@
     "lodash": "^4.16.4",
     "moment": "^2.15.1",
     "nconf": "^0.8.4",
+    "node-qqwry": "0.0.2",
     "sqlite3": "^3.1.6"
   },
   "devDependencies": {

@@ -14,7 +14,7 @@ $(document).ready(function () {
         Notification.permission = status;
       }
     });
-    var n = new Notification('Hi');
+    var n = new Notification('欢迎使用本系统');
   }
 
   ipc.on('init', function (event, data) {

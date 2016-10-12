@@ -1,5 +1,4 @@
 var electron = require('electron');
-var Mock = require('mockjs');
 var os = require('os');
 var crypto = require('crypto');
 var evilscan = require('evilscan');
@@ -15,25 +14,21 @@ var BrowserWindow = electron.BrowserWindow;
 var ipc = electron.ipcMain;
 var globalShortcut = electron.globalShortcut;
 var session = electron.session;
-var Random = Mock.Random;
-
-Random.ip();
-Random.protocol();
-
 var mainWindow = null;
 var settingsWindow = null;
 
 function createWindow () {
 
   mainWindow = new BrowserWindow({
-    title: 'Snifff',
     width: 1200,
-    height: 800
+    height: 800,
+    skipTaskbar: true,
+    type: 'textured',
+
   });
   mainWindow.loadURL(`file://${__dirname}/public/html/index.html`);
 
   var webContents = mainWindow.webContents;
-  webContents.openDevTools();
 
   for (var key in globalShortcutMap) {
     (function (k) {
@@ -44,13 +39,7 @@ function createWindow () {
   }
 
   webContents.on('did-finish-load', function () {
-    var data = Mock.mock({
-        'pcaps|50-100': [{
-            'srcIp|+1': '@ip',
-            'dstIp|+1': '@ip',
-            'protocol': '@protocol'
-        }]
-    });
+    var data = {};
     data.os = {};
     data.os.type = os.type();
     data.os.hostname = os.hostname();
@@ -58,6 +47,7 @@ function createWindow () {
     data.os.networkInterfaces = os.networkInterfaces();
     data.passwordKey = utils.readSettings('password_key');
     webContents.send('init', JSON.stringify(data));
+    webContents.openDevTools();
   });
 
   mainWindow.on('closed', function () {
