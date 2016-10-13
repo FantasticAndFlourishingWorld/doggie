@@ -1,0 +1,4 @@
+dnet==1.12
+pcapy==0.10.10
+pylibpcap==0.6.4
+scapy==2.3.2
