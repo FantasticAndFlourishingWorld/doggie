@@ -69,6 +69,20 @@
 #<application layer>应用层
 ##HTTP
 
- * url:统一资源定位符，在HTTP请求包中不为空，在HTTP响应包中为空字符串。
+###response
 
+* url:统一资源定位符，在HTTP请求包中不为空，在HTTP响应包中为空字符串。
+ protocol_edition:协议版本
+ state_code:状态码
+ state_code_description:状态码描述
+ response_head:响应头部，是“头部字段名称:值” 形式的字典
+ response_body:响应包体
+
+###request
+
+* url:统一资源定位符，在HTTP请求包中不为空，在HTTP响应包中为空字符串。
+  request_method":请求方法
+  protocol_edition:协议版本
+  request_head:请求头部，是“头部字段名称:值” 形式的字典
+  request_body:请求包体
 ##other application layer protocol
