@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../public/styles/main.css">
     <script typw="text/javascript">
-      window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.min.js');
+      window.$ = window.jQuery = require(__dirname + '/../../node_modules/jquery/dist/jquery.min.js');
     </script>
-    <script src="../../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <title>数据包分析</title>
   </head>
@@ -145,9 +145,7 @@
         </div>
       </div>
     </div>
-    <script src="../javascripts/echarts.min.js"></script>
-    <script src="../../theme/dark.min.js"></script>
-    <script src="../javascripts/theme.js"></script>
+    <script src="../javascripts/init.js"></script>
     <script src="../javascripts/pcap.js"></script>
   </body>
 </html>

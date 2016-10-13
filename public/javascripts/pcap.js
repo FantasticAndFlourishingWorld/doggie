@@ -1,6 +1,7 @@
 var electron = require('electron');
 var moment = require('moment');
 var sqlite3 = require('sqlite3').verbose();
+var lbs = require('node-qqwry');
 var PythonShell = require(__dirname + '/../javascripts/python-shell.js');
 
 var ipc = electron.ipcRenderer;
@@ -10,9 +11,7 @@ $(document).ready(function () {
   var state = {
     page: 1,
     perPage: 10,
-    pcaps: [],
-    xData: [],
-    viewNum: 30
+    pcaps: []
   };
 
   ipc.on('init', function (event, data) {
@@ -79,7 +78,7 @@ $(document).ready(function () {
     sniffShell = new PythonShell('sniffer.py', {
       mode: "json",
       scriptPath: __dirname + '/../py',
-      args: [bpf]
+      args: [__dirname, bpf]
     });
 
     sniffShell.on('message', function (pktObj) {
@@ -94,7 +93,7 @@ $(document).ready(function () {
     });
 
     sniffShell.on('error', function (err) {
-      alert(err);
+      console.log(err);
       $loadingBtn.button('reset');
     });
 

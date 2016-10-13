@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 #-*- encoding: utf-8 -*-
 from scapy.all import *
+from function_show_http_packet import show_http_packet
 import time
 def flypaper(fly):
     try:
@@ -46,6 +47,7 @@ def flypaper(fly):
                                 "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                                 "url":url},
+                                "http":show_http_packet(fly),                                
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}
@@ -59,6 +61,7 @@ def flypaper(fly):
                                 "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}                          
@@ -75,7 +78,7 @@ def flypaper(fly):
             elif proto==0x11:
                 sport=fly[UDP].sport# (16)
                 dport=fly[UDP].dport# (16)
-                len=fly[UDP].len# (16)
+                UDP_len=fly[UDP].len# (16)
                 chksum=fly[UDP].chksum# (16)
                 ####<application layer>
                 tempfly=str(fly)            
@@ -87,8 +90,9 @@ def flypaper(fly):
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                                 "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
-                                "sport":sport,"dport":dport,"len":len,"chksum":chksum,
+                                "sport":sport,"dport":dport,"UDP_len":UDP_len,"chksum":chksum,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}
@@ -100,8 +104,9 @@ def flypaper(fly):
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                                 "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
-                                "sport":sport,"dport":dport,"len":len,"chksum":chksum,
+                                "sport":sport,"dport":dport,"UDP_len":UDP_len,"chksum":chksum,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}                  
@@ -111,7 +116,7 @@ def flypaper(fly):
                     return {"protocol":"UDP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                             "version":version,"ihl":ihl,"tos":tos,"len":len,"id":id,"flags":flags,"frag":frag,"ttl":ttl,"proto":proto,"IP_chksum":IP_chksum,"IP_src":IP_src,"IP_dst":IP_dst,
-                            "sport":sport,"dport":dport,"len":len,"chksum":chksum},
+                            "sport":sport,"dport":dport,"UDP_len":UDP_len,"chksum":chksum},
                             "packet":strfly,
                             "time":(time.time()),
                             "length":strfly.__sizeof__()}
@@ -157,6 +162,7 @@ def flypaper(fly):
                                 "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}
@@ -170,6 +176,7 @@ def flypaper(fly):
                                 "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
                                 "sport":sport,"dport":dport,"seq":seq,"ack":ack,"dataofs":dataofs,"reserved":reserved,"TCP_flags":TCP_flags,"window":window,"chksum":chksum,"urgptr":urgptr,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}  
@@ -186,7 +193,7 @@ def flypaper(fly):
             elif nh==0x11:
                 sport=fly[UDP].sport# (16)
                 dport=fly[UDP].dport# (16)
-                len=fly[UDP].len# (16)
+                UDP_len=fly[UDP].len# (16)
                 chksum=fly[UDP].chksum# (16)
                 ####<application layer>
                 tempfly=str(fly)
@@ -198,8 +205,9 @@ def flypaper(fly):
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                                 "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
-                                "sport":sport,"dport":dport,"len":len,"chksum":chksum,
+                                "sport":sport,"dport":dport,"UDP_len":UDP_len,"chksum":chksum,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}
@@ -211,8 +219,9 @@ def flypaper(fly):
                         return {"protocol":"HTTP",
                                 "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                                 "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
-                                "sport":sport,"dport":dport,"len":len,"chksum":chksum,
+                                "sport":sport,"dport":dport,"UDP_len":UDP_len,"chksum":chksum,
                                 "url":url},
+                                "http":show_http_packet(fly),
                                 "packet":strfly,
                                 "time":(time.time()),
                                 "length":strfly.__sizeof__()}
@@ -222,7 +231,7 @@ def flypaper(fly):
                     return {"protocol":"UDP",
                             "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
                             "version":version,"tc":tc,"fl":fl,"plen":plen,"nh":nh,"hlim":hlim,"IP_src":IP_src,"IP_dst":IP_dst,
-                            "sport":sport,"dport":dport,"len":len,"chksum":chksum},
+                            "sport":sport,"dport":dport,"UDP_len":UDP_len,"chksum":chksum},
                             "packet":strfly,
                             "time":(time.time()),
                             "length":strfly.__sizeof__()}
@@ -241,15 +250,15 @@ def flypaper(fly):
             hwlen=fly[ARP].hwlen# (8)
             plen=fly[ARP].plen# (8)
             op=fly[ARP].op# (16)
-            hwsrc=fly[ARP].hwsrc# (6)
-            psrc=fly[ARP].psrc# (4)
-            hwdst=fly[ARP].hwdst# (6)
-            pdst=fly[ARP].pdst# (4);
+            MAC_src=fly[ARP].hwsrc# (6)
+            IP_src=fly[ARP].psrc# (4)
+            MAC_dst=fly[ARP].hwdst# (6)
+            IP_dst=fly[ARP].pdst# (4);
             #print "ARP"
             strfly=str(fly)      
             return {"protocol":"ARP",
                     "result":{"MAC_dst":MAC_dst,"MAC_src":MAC_src,"type":type,
-                    "hwtype":hwtype,"ptype":ptype,"hwlen":hwlen,"plen": plen,"op":op,"hwsrc":hwsrc,"psrc":psrc,"hwdst":hwdst,"pdst":pdst},
+                    "hwtype":hwtype,"ptype":ptype,"hwlen":hwlen,"plen": plen,"op":op,"MAC_src":MAC_src,"IP_src":IP_src,"MAC_dst":MAC_dst,"IP_dst":IP_dst},
                     "packet":strfly,
                     "time":(time.time()),
                     "length":strfly.__sizeof__()}   

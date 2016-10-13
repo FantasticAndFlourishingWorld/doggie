@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
 import sqlite3
-import os
+# import sys
+# import os
 
 class SQLite():
-    def __init__(self, dbName):
+    def __init__(self, dbName, dbPath):
         self.dbName = dbName
-        self.dbPath = os.getcwd() + "/database/" + dbName.lower() + ".db"
+        self.dbPath = dbPath + "/../../database/" + dbName.lower() + ".db"
+        # self.dbPath = os.getcwd() + "/database/" + dbName.lower() + ".db"
+
 
     def createTable(self):
         conn = sqlite3.connect(self.dbPath)
@@ -33,8 +36,6 @@ class SQLite():
         conn = sqlite3.connect(self.dbPath)
         keysStr = ','.join(keys).upper()
         valuesStr = ','.join(values).upper()
-        # print "INSERT INTO " + self.dbName + " (" + keysStr + ") \
-        # VALUES (" + valuesStr + ");"
         conn.execute("INSERT INTO " + self.dbName + " (" + keysStr + ") \
         VALUES (" + valuesStr + ");")
 
