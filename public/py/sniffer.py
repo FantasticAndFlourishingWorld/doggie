@@ -2,8 +2,8 @@
 # -*-coding:utf-8 -*-
 import sys
 import json
-import logging
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+# import logging
+# logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from db import SQLite
 from function_flypaper import flypaper
@@ -30,6 +30,10 @@ def sniff_callback(pkt):
     stime = str(int(pktObj.get('time', 0) * 1000))
     pktlen = str(pktObj.get('length', "0"))
 
+    httpInfo = {}
+    if pktObj['protocol'] is 'HTTP':
+        pass
+
     print json.dumps({
         "PROTOCOL": pktObj['protocol'],
         "SPORT": sport,
@@ -45,7 +49,10 @@ def sniff_callback(pkt):
 
 def sniff_index(sniff_prn, bpf):
     """The index of the sniff module"""
-    sniff(prn=sniff_callback, store=0, filter=bpf)
+    if bpf:
+        sniff(prn=sniff_prn, store=0, filter=bpf)
+    else:
+        sniff(prn=sniff_prn, store=0)
 
 if __name__ == '__main__':
     sq.createTable()

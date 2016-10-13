@@ -1,6 +1,7 @@
 var electron = require('electron');
 var moment = require('moment');
 var sqlite3 = require('sqlite3').verbose();
+var lbs = require('node-qqwry');
 var PythonShell = require(__dirname + '/../javascripts/python-shell.js');
 
 var ipc = electron.ipcRenderer;

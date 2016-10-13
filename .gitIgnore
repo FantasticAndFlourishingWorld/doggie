@@ -4,4 +4,6 @@ database/*.db
 .DS_Store?
 bundle.js
 .pcap
+.so
 public/py/*.pyc
+public/py/scapy/*

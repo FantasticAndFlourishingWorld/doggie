@@ -17,11 +17,12 @@ def read_pcap(path):
         result = {}
         result['SMAC'] = pktResult.get('MAC_src', None)
         result['DMAC'] = pktResult.get('MAC_dst', None)
-        result['SPORT'] = pktResult.get('sport', None)
-        result['DPORT'] = pktResult.get('dport', None)
+        result['SPORT'] = pktResult.get('sport', '0')
+        result['DPORT'] = pktResult.get('dport', '0')
         result['SIP'] = pktResult.get('IP_src', None)
         result['DIP'] = pktResult.get('IP_dst', None)
         result['PROTOCOL'] = pkt.get('protocol', None)
+        result['STIME'] = pkt.get('time', 0) * 1000
 
         results.append(result)
 

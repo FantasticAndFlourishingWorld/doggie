@@ -1,56 +1,24 @@
-var moment = require('moment');
+var electron = require('electron');
 var utils = require(__dirname + '/../javascripts/utils.js');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
+
+var ipc = electron.ipcRenderer;
 
 $(document).ready(function () {
 
   var lenChartWrapper = document.getElementById('lenChart');
+  var mapChartWrapper = document.getElementById('mapChart');
   var lenChart = echarts.init(lenChartWrapper, 'dark');
-  var pktLenData = [];
-  var pktNumData = [];
+  var mapChart = echarts.init(mapChartWrapper, 'dark');
 
-  db.all('SELECT * FROM PACKET ORDER BY STIME ASC', function (err, rows) {
-    if (rows.length === 0) {
-      lenChartWrapper.innerHTML = '<p class="text-muted">没有流量数据, 请先抓取</p>';
-      return;
-    }
-    var lastSec = new Date(rows[0].STIME).getUTCSeconds();
-    var len = 0;
-    var pacNum = 0;
-    rows.forEach(function (row) {
-      var curSec = new Date(row.STIME).getUTCSeconds();
-      if (lastSec === curSec) {
-        len += row.PLEN;
-        pacNum += 1;
-      } else {
-        var time = moment(new Date(row.STIME)).format('GGGG.MM.D H:mm:ss');
-        len = Math.round(len / 1024 * 100) / 100;
-        pktLenData.push({
-          time: time,
-          value: len
-        });
-        pktNumData.push({
-          time: time,
-          value: pacNum
-        });
-        len = 0;
-        pacNum = 0;
-        lastSec = curSec;
-      }
-    });
-    if (len > 0) {
-      pktLenData.push({
-        time: moment(new Date(rows[rows.length - 1].STIME)).format('GGGG.MM.D H:mm:ss'),
-        value: len
-      });
-    }
+  lenChart.showLoading();
+  mapChart.showLoading();
 
-    var timeData = pktNumData.map(function (pkt) {
-      return pkt.time;
-    });
+  ipc.on('getChartDataDone', function (event, data) {
+    data = JSON.parse(data);
+    lenChart.hideLoading();
+    mapChart.hideLoading();
 
-    lenOption = {
+    var lenOption = {
       title : {
         text: '数据流量及数据包数量统计',
         x: 'center',
@@ -99,7 +67,7 @@ $(document).ready(function () {
           axisLine: {
             onZero: true
           },
-          data: timeData
+          data: data.timeData
         },
         {
           gridIndex: 1,
@@ -108,7 +76,7 @@ $(document).ready(function () {
           axisLine: {
             onZero: true
           },
-          data: timeData,
+          data: data.timeData,
           show: false,
           position: 'top'
         }
@@ -137,7 +105,7 @@ $(document).ready(function () {
           type:'line',
           symbol: 'none',
           sampling: 'average',
-          data: pktLenData
+          data: data.pktLenData
         },
         {
           name:'数据包数量',
@@ -146,14 +114,71 @@ $(document).ready(function () {
           yAxisIndex: 1,
           symbol: 'none',
           sampling: 'average',
-          data: pktNumData
+          data: data.pktNumData
         }
       ]
     };
-
     lenChart.setOption(lenOption);
-    db.close();
+
+    var mapOption = {
+      title : {
+        text: 'ip地理位置',
+        x: 'center',
+        align: 'right'
+      },
+      visualMap: {
+        min: 0,
+        max: 10000,
+        splitNumber: 5,
+        color: ['#d94e5d','#eac736','#50a3ba'],
+        textStyle: {
+          color: '#fff'
+        }
+      },
+      geo: {
+        map: 'china',
+        label: {
+          emphasis: {
+            show: false
+          }
+        },
+        itemStyle: {
+          normal: {
+            areaColor: '#323c48',
+            borderColor: '#111'
+          },
+          emphasis: {
+            areaColor: '#2a333d'
+          }
+        }
+      },
+      series: [{
+        name: 'ip地理位置',
+        // type: 'scatter',
+        type: 'heatmap',
+        coordinateSystem: 'geo',
+        // data: convertData(srcMapData),
+        data: data.mapData,
+        label: {
+          normal: {
+            show: false
+          },
+          emphasis: {
+            show: true
+          }
+        },
+        itemStyle: {
+          emphasis: {
+            borderColor: '#fff',
+            borderWidth: 1
+          }
+        }
+      }]
+    };
+    mapChart.setOption(mapOption);
 
   });
+
+  ipc.send('getChartData');
 
 });
