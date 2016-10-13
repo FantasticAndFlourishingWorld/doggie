@@ -1,0 +1,11 @@
+#响应包
+ {"protocol_edition":protocol_edition,
+ "state_code":state_code,
+ "state_code_description":state_code_description,
+  "response_head":response_head,
+  "response_body":response_body}
+#请求包
+ {"request_method":request_method,
+ "protocol_edition":protocol_edition,
+  "request_head":request_head,
+  "request_body":request_body}

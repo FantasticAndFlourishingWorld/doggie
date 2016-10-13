@@ -38,6 +38,6 @@ def show_http_packet(packet):
             i=i+1
         
         request_body=temphttp[-1]
-        return {"request_method":request_method,"url":url,"protocol_edition":protocol_edition,
+        return {"request_method":request_method,"protocol_edition":protocol_edition,
                "request_head":request_head,
                "request_body":request_body}   
