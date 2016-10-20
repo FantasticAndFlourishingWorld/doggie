@@ -1,4 +1,8 @@
 var electron = require('electron');
+var lbs = require('node-qqwry');
+var moment = require('moment');
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
 var utils = require(__dirname + '/../javascripts/utils.js');
 
 var ipc = electron.ipcRenderer;
@@ -13,14 +17,122 @@ $(document).ready(function () {
   lenChart.showLoading();
   mapChart.showLoading();
 
-  ipc.on('getChartDataDone', function (event, data) {
-    data = JSON.parse(data);
+  var pktLenData = [];
+  var pktNumData = [];
+  var timeData = [];
+  var srcMapData = [];
+  var dstMapData = [];
+  var mapData = [];
+
+  db.all('SELECT * FROM PACKET ORDER BY STIME ASC', function (err, rows) {
+    db.close();
+
+    if (err || rows.length === 0) {
+      return;
+    }
+
+    var lastSec = new Date(rows[0].STIME).getUTCSeconds();
+    var len = 0;
+    var pacNum = 0;
+
+    rows.forEach(function (row) {
+      var curSec = new Date(row.STIME).getUTCSeconds();
+      if (lastSec === curSec) {
+        len += row.PLEN;
+        pacNum += 1;
+      } else {
+        var time = moment(new Date(row.STIME)).format('GGGG.MM.D H:mm:ss');
+        len = Math.round(len / 1024 * 100) / 100;
+        pktLenData.push({
+          time: time,
+          value: len
+        });
+        pktNumData.push({
+          time: time,
+          value: pacNum
+        });
+        timeData.push(time);
+        len = 0;
+        pacNum = 0;
+        lastSec = curSec;
+
+        // var srcGeoName = lbs.getArea(row.SIP);
+        // var dstGeoName = lbs.getArea(row.DIP);
+        // var srcLastChar = srcGeoName[srcGeoName.length - 1];
+        // var dstLastChar = dstGeoName[dstGeoName.length - 1];
+        var srcBounds = lbs.getBounds(row.SIP);
+        // .map(function (bound) {
+        //   return bound.toFixed(2);
+        // });
+
+        var dstBounds = lbs.getBounds(row.DIP);
+        // .map(function (bound) {
+        //   return bound.toFixed(2);
+        // });
+
+        var bounds = [
+          [srcBounds[0], srcBounds[1]],
+          [srcBounds[2], srcBounds[3]],
+          [dstBounds[0], dstBounds[1]],
+          [dstBounds[2], dstBounds[3]]
+        ];
+
+        // if (srcLastChar === '市' || srcLastChar === '省') {
+        //   srcGeoName = srcGeoName.slice(0, -1);
+        // }
+        // if (dstLastChar === '市' || dstLastChar === '省') {
+        //   dstGeoName = dstGeoName.slice(0, -1);
+        // }
+        // var srcGeoIndex = srcMapData.findIndex(function (data) {
+        //   return srcGeoName === data.name;
+        // });
+        // var dstGeoIndex = dstMapData.findIndex(function (data) {
+        //   return dstGeoName === data.name;
+        // });
+        // if (srcGeoIndex < 0) {
+        //   srcMapData.push({
+        //     'name': srcGeoName,
+        //     'value': 1
+        //   });
+        // } else {
+        //   srcMapData[srcGeoIndex] = {
+        //     'name': srcMapData[srcGeoIndex].name,
+        //     'value': srcMapData[srcGeoIndex].value + 1
+        //   };
+        // }
+        // if (dstGeoIndex < 0) {
+        //   dstMapData.push({
+        //     'name': dstGeoName,
+        //     'value': 1
+        //   });
+        // } else {
+        //   dstMapData[dstGeoIndex] = {
+        //     'name': dstMapData[dstGeoIndex].name,
+        //     'value': dstMapData[dstGeoIndex].value + 1
+        //   };
+        // }
+
+        mapData = mapData.concat(bounds);
+      }
+
+      if (len > 0) {
+        var lastTime = moment(new Date(rows[rows.length - 1].STIME)).format('GGGG.MM.D H:mm:ss');
+        pktLenData.push({
+          time: lastTime,
+          value: len
+        });
+        timeData.push(lastTime);
+      }
+
+    });
+
     lenChart.hideLoading();
     mapChart.hideLoading();
 
     var lenOption = {
       title : {
-        text: '数据流量及数据包数量统计',
+        text: '数据流量及数据包数量统计图',
+        subtext: '统计抓取的数据包数量, 按时间分布',
         x: 'center',
         align: 'right'
       },
@@ -67,7 +179,7 @@ $(document).ready(function () {
           axisLine: {
             onZero: true
           },
-          data: data.timeData
+          data: timeData
         },
         {
           gridIndex: 1,
@@ -76,7 +188,7 @@ $(document).ready(function () {
           axisLine: {
             onZero: true
           },
-          data: data.timeData,
+          data: timeData,
           show: false,
           position: 'top'
         }
@@ -105,7 +217,7 @@ $(document).ready(function () {
           type:'line',
           symbol: 'none',
           sampling: 'average',
-          data: data.pktLenData
+          data: pktLenData
         },
         {
           name:'数据包数量',
@@ -114,7 +226,7 @@ $(document).ready(function () {
           yAxisIndex: 1,
           symbol: 'none',
           sampling: 'average',
-          data: data.pktNumData
+          data: pktNumData
         }
       ]
     };
@@ -122,15 +234,22 @@ $(document).ready(function () {
 
     var mapOption = {
       title : {
-        text: 'ip地理位置',
+        text: 'ip位置热力图',
+        subtext: '根据持久化存储的数据包ip信息绘制的热力图',
         x: 'center',
         align: 'right'
       },
+      toolbox: {
+        feature: {
+          restore: {},
+          saveAsImage: {}
+        }
+      },
       visualMap: {
         min: 0,
-        max: 10000,
         splitNumber: 5,
-        color: ['#d94e5d','#eac736','#50a3ba'],
+        color: ['#50a3ba', '#eac736', '#d94e5d'],
+        colorAlpha: 0.5,
         textStyle: {
           color: '#fff'
         }
@@ -154,17 +273,16 @@ $(document).ready(function () {
       },
       series: [{
         name: 'ip地理位置',
-        // type: 'scatter',
         type: 'heatmap',
+        // type: 'scatter',
         coordinateSystem: 'geo',
-        // data: convertData(srcMapData),
-        data: data.mapData,
+        data: mapData,
         label: {
           normal: {
             show: false
           },
           emphasis: {
-            show: true
+            show: false
           }
         },
         itemStyle: {
@@ -178,7 +296,5 @@ $(document).ready(function () {
     mapChart.setOption(mapOption);
 
   });
-
-  ipc.send('getChartData');
 
 });

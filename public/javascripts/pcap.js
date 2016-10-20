@@ -2,6 +2,7 @@ var electron = require('electron');
 var moment = require('moment');
 var sqlite3 = require('sqlite3').verbose();
 var lbs = require('node-qqwry');
+var utils = require(__dirname + '/../javascripts/utils.js');
 var PythonShell = require(__dirname + '/../javascripts/python-shell.js');
 
 var ipc = electron.ipcRenderer;
@@ -67,6 +68,7 @@ $(document).ready(function () {
   $('.start-sniff').click(function () {
     var pktCount = 0;
     var bpf = $('input[name=filter-rule]').val();
+    var bpfFilters = utils.readSettings('bpf');
     $loadingBtn = $(this).button('loading');
     $('.fixed-head-table-wrapper tbody').html('');
     state.pcaps = [];
@@ -74,6 +76,13 @@ $(document).ready(function () {
     $('.page-current').html(state.page);
     $('.page-all').html(state.page);
     $('input[name=page-number]').val(1);
+
+    for (var i = 0, len = bpfFilters.length; i < len; ++i) {
+      if (bpfFilters[i].name === $('input[name=filter-rule]').val()) {
+        bpf = bpfFilters[i].rule;
+        break;
+      }
+    }
 
     sniffShell = new PythonShell('sniffer.py', {
       mode: "json",
@@ -88,12 +97,18 @@ $(document).ready(function () {
 
     sniffShell.on('end', function (err) {
       if (err) {
-        console.log(err);
+        console.error(err);
       }
     });
 
     sniffShell.on('error', function (err) {
-      console.log(err);
+      if (err.message.endsWith("'pcap_compile')")) {
+        $('input[name=filter-rule]')
+          .val('')
+          .attr('placeholder', '无效的规则');
+      } else {
+        console.error(err.message);
+      }
       $loadingBtn.button('reset');
     });
 
@@ -168,8 +183,8 @@ function renderPcaps (page, perPage, pcaps, reRender) {
     node += '<td>' + moment(new Date(parseInt(pcap.STIME, 10))).format('GGGG.MM.D H:mm:ss') + '</td>';
     node += '<td>' + (pcap.SMAC || '-') + '</td>';
     node += '<td>' + (pcap.DMAC || '-') + '</td>';
-    node += '<td>' + (pcap.SPORT !== '0' ? pcap.SPORT : '-') + '</td>';
-    node += '<td>' + (pcap.DPORT !== '0' ? pcap.DPORT : '-') + '</td>';
+    node += '<td>' + (String(pcap.SPORT) !== '0' ? pcap.SPORT : '-') + '</td>';
+    node += '<td>' + (String(pcap.DPORT) !== '0' ? pcap.DPORT : '-') + '</td>';
     node += '<td>' + (pcap.SIP || '-') + '</td>';
     node += '<td>' + (pcap.DIP || '-') + '</td>';
     node += '<td>' + pcap.PROTOCOL + '</td>';

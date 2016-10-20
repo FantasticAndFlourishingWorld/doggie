@@ -2,8 +2,8 @@
 # -*-coding:utf-8 -*-
 import sys
 import json
-# import logging
-# logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from db import SQLite
 from function_flypaper import flypaper
