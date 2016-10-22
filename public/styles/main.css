@@ -17,3 +17,6 @@ html, body {
 .scanned-port {
   margin-right: 12px;
 }
+.block {
+  height: 100px;
+}

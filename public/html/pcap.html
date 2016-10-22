@@ -95,12 +95,55 @@
         </li>
       </ul>
     </nav>
-    <div class="container-fluid fullHeight">
-      <div class="jumbotron text-center" id="drop-file">
-        <p class="text-muted">将pcap文件拖拽到此处解析</p>
+    <div class="container-fluid">
+      <div class="row" id="pcap-detail">
+        <div class="col-bg-12 col-md-12 col-sm-12">
+
+          <div class="col-bg-6 col-md-6 col-sm-6">
+            <div class="panel panel-default ">
+              <div class="panel-heading"><span class="glyphicon glyphicon-briefcase"></span> 读取本地数据包</div>
+              <div class="panel-body text-muted" id="drop-file">将数据包文件拖拽到此处解析</div>
+            </div>
+          </div>
+          <div class="col-bg-6 col-md-6 col-sm-6">
+
+            <div class="panel-group" role="tablist">
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="collapseListGroupHeading">
+                  数据包详情
+                  <h4 class="panel-title">
+                    <a class="btn btn-default" data-toggle="collapse" href="#collapseEther" aria-expanded="true" aria-controls="collapseEther">链路层</a>
+                    <a class="btn btn-default" data-toggle="collapse" href="#collapseNetwork" aria-expanded="true" aria-controls="collapseNetwork">网络层</a>
+                    <a class="btn btn-default" data-toggle="collapse" href="#collapseTransport" aria-expanded="true" aria-controls="collapseTransport">传输层</a>
+                  </h4>
+                </div>
+                <div id="collapseEther" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading" aria-expanded="true">
+                  <ul class="list-group">
+                    <li class="list-group-item">Bootply</li>
+                    <li class="list-group-item">One itmus ac facilin</li>
+                    <li class="list-group-item">Second eros</li>
+                  </ul>
+                </div>
+                <div id="collapseNetwork" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading" aria-expanded="true">
+                  <ul class="list-group">
+                    <li class="list-group-item">One itmus ac facilin</li>
+                    <li class="list-group-item">Second eros</li>
+                  </ul>
+                </div>
+                <div id="collapseTransport" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading" aria-expanded="true">
+                  <ul class="list-group">
+                    <li class="list-group-item">Second eros</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
       </div>
       <div class="row fixed-head-table-wrapper">
-        <div class="col-bg-12">
+        <div class="col-bg-12 col-md-12 col-sm-12">
           <div class="panel panel-default">
             <div class="panel-heading">
               <p>数据包</p>
@@ -108,9 +151,9 @@
                 <div class="form-group">
                   <input type="text" class="form-control form-horizental filter-rule" name="filter-rule" placeholder="过滤规则(bpf)">
                   <button type="button" class="btn btn-default btn-clear-filter-rule"><span class="glyphicon glyphicon-refresh"></span>清空</button>
-                  <button type="button" class="btn btn-info start-sniff" data-loading-text="抓取中" audocomplete="off"><span class="glyphicon glyphicon-play"></span>开始抓取</button>
-                  <button type="button" class="btn btn-danger stop-sniff"><span class="glyphicon glyphicon-pause"></span>停止抓取</button>
-                  <button type="button" class="btn btn-danger see-history"><span class="glyphicon glyphicon-zoom-in"></span>查看历史数据</button>
+                  <button type="button" class="btn btn-primary start-sniff" data-loading-text="抓取中" audocomplete="off"><span class="glyphicon glyphicon-play"></span>开始抓取</button>
+                  <button type="button" class="btn btn-primary stop-sniff"><span class="glyphicon glyphicon-pause"></span>停止抓取</button>
+                  <button type="button" class="btn btn-primary see-history"><span class="glyphicon glyphicon-zoom-in"></span>查看历史数据</button>
                   <span class="pkt-count text-success"></span>
                 </div>
               </form>
@@ -127,6 +170,7 @@
                     <td>发送ip</td>
                     <td>目的ip</td>
                     <td>协议</td>
+                    <td>详细信息</td>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -134,13 +178,26 @@
             </div>
             <div class="panel-footer">
               <form class="form-inline" role="form">
-                <button type="button" class="previous btn btn-info">&larr; 上一页</button>
+                <button type="button" class="previous btn btn-primary">&larr; 上一页</button>
                 第<span class="page-current"></span>页/共<span class="page-all"></span>页
                 <input type="number" min="1" max="1" class="form-control form-horizental page-number" name="page-number" placeholder="">
-                <button type="button" class="btn btn-info btn-page-dump">跳转</button>
-                <button type="button" class="next btn btn-info">下一页 &rarr;</button>
+                <button type="button" class="btn btn-primary btn-page-dump">跳转</button>
+                <button type="button" class="next btn btn-primary">下一页 &rarr;</button>
               </form>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade pkt-modal-lg">
+      <div class="modal-dialog modal-bg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>查看数据包</h4>
+          </div>
+          <div class="modal-body" id="pkt-info"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary password-submit">关闭</button>
           </div>
         </div>
       </div>
