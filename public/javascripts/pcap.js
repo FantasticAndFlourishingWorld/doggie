@@ -16,12 +16,6 @@ $(document).ready(function () {
   };
 
   ipc.on('init', function (event, data) {
-    // data = JSON.parse(data);
-    // db.all('SELECT * FROM PACKET', function (err, rows) {
-    //   data.pcaps = rows;
-    //   state.pcaps = data.pcaps;
-    //   renderPcaps(state.page, state.perPage, data.pcaps, false);
-    // });
     $('input[name=page-number]').val(1);
   });
 
@@ -32,14 +26,14 @@ $(document).ready(function () {
   $('.previous').click(function () {
     if (state.page > 1) {
       state.page -= 1;
-      renderPcaps(state.page, state.perPage, state.pcaps, true);
+      renderPcaps(state, true);
     }
   });
 
   $('.next').click(function () {
     if (state.page < Math.ceil(state.pcaps.length / state.perPage)) {
       state.page += 1;
-      renderPcaps(state.page, state.perPage, state.pcaps, true);
+      renderPcaps(state, true);
     }
   });
 
@@ -47,7 +41,7 @@ $(document).ready(function () {
     var db = new sqlite3.Database(__dirname + '/../../database/packet.db');
     db.all('SELECT * FROM PACKET ORDER BY STIME ASC', function (err, rows) {
       state.pcaps = rows;
-      renderPcaps(state.page, state.perPage, state.pcaps, true);
+      renderPcaps(state, true);
       db.close();
     });
   });
@@ -56,7 +50,7 @@ $(document).ready(function () {
     var p = parseInt($('input[name=page-number]').val(), 10);
     if (p > 0) {
       state.page = p;
-      renderPcaps(state.page, state.perPage, state.pcaps, true);
+      renderPcaps(state, true);
     }
   });
 
@@ -92,7 +86,7 @@ $(document).ready(function () {
 
     sniffShell.on('message', function (pktObj) {
       state.pcaps.unshift(pktObj);
-      renderPcaps(state.page, state.perPage, state.pcaps, false);
+      renderPcaps(state, false);
     });
 
     sniffShell.on('end', function (err) {
@@ -144,7 +138,7 @@ $(document).ready(function () {
 
         rdpcapShell.on('message', function (pkts) {
           state.pcaps = pkts.pkts;
-          renderPcaps(state.page, state.perPage, state.pcaps, true);
+          renderPcaps(state, true);
         });
 
         rdpcapShell.on('end', function (err) {
@@ -164,7 +158,10 @@ $(document).ready(function () {
 
 });
 
-function renderPcaps (page, perPage, pcaps, reRender) {
+function renderPcaps (state, reRender) {
+  var page = state.page;
+  var perPage = state.perPage;
+  var pcaps = state.pcaps;
   var protocolClasset = {
     'HTTP': 'success',
     'ARP': 'danger',
@@ -179,7 +176,8 @@ function renderPcaps (page, perPage, pcaps, reRender) {
   for (var i = (page - 1) * perPage, len = Math.min(pcaps.length, page * perPage); i < len; ++i) {
     var node = '<tr class="' + (protocolClasset[pcaps[i].PROTOCOL] || '') + '">';
     var pcap = pcaps[i];
-    var info = '详细信息';
+    var info = '<td><button class="btn btn-xs btn-success pkt-info-btn">more</button></td>';
+
     node += '<td>' + moment(new Date(parseInt(pcap.STIME, 10))).format('GGGG.MM.D H:mm:ss') + '</td>';
     node += '<td>' + (pcap.SMAC || '-') + '</td>';
     node += '<td>' + (pcap.DMAC || '-') + '</td>';
@@ -188,9 +186,15 @@ function renderPcaps (page, perPage, pcaps, reRender) {
     node += '<td>' + (pcap.SIP || '-') + '</td>';
     node += '<td>' + (pcap.DIP || '-') + '</td>';
     node += '<td>' + pcap.PROTOCOL + '</td>';
+    node += info;
     node += '</tr>';
     $wrapper.append(node);
   }
+
+  $('.fixed-head-table-wrapper').on('click', '.pkt-info-btn', function () {
+    var index = (state.page - 1) * state.perPage + $('.pkt-info-btn').index($(this));
+    renderPkt(state.pcaps[index]);
+  });
 
   if (reRender) {
     $wrapper.hide().show(200);
@@ -210,4 +214,9 @@ function renderPcaps (page, perPage, pcaps, reRender) {
   $('input[name=page-number]').val(parseInt(page, 10));
   $('.page-current').html(page);
   $('.page-all').html(pageNumber);
+}
+
+function renderPkt (pkt) {
+  var $wrapper = $('#pkt-info');
+  // todo
 }
