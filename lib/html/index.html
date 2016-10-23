@@ -7,9 +7,9 @@
     <link rel="icon" href="" type="image/x-icon">
     <link rel="shortcut icon" href="" type="image/x-icon">
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../public/styles/main.css">
+    <link rel="stylesheet" href="../lib/styles/main.css">
     <script typw="text/javascript">
-      window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.min.js');
+      window.$ = window.jQuery = require(__dirname + '/../../node_modules/jquery/dist/jquery.min.js');
     </script>
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -86,8 +86,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">功能 <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="index.html"><span class="glyphicon glyphicon glyphicon-home"></span> 主菜单</a></li>
             <li><a href="pcap.html"><span class="glyphicon glyphicon-dashboard"></span> 数据包监控</a></li>
+            <li><a href="flow.html"><span class="glyphicon glyphicon-stats"></span> 流量统计</a></li>
             <li><a href="settings.html"><span class="glyphicon glyphicon-user"></span> 个人设置</a></li>
             <li class="divider"></li>
             <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 关于</a></li>
@@ -95,15 +95,104 @@
         </li>
       </ul>
     </nav>
-    <div class="container-fluid fullHeight">
-      <div class="jumbotron fullHeight" id="lenChart"></div>
-      <div class="jumbotron fullHeight" id="mapChart"></div>
-    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-bg-6 col-sm-6 col-xs-12">
 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-bg-12 col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">系统信息</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-bg-12 col-md-6 col-sm-12">
+                  <p>系统信息 <span class="text-danger os-type"></span> <span class="text-danger os-arch"></span> <span class="text-danger os-release"></span></p>
+                  <p>网络状况 <span class="text-success os-hostname"></span></p>
+                  <div>网络接口
+                    <table class="table table-hover table-bordered text-center">
+                      <thead>
+                        <tr>
+                          <td>ip地址</td>
+                          <td>协议</td>
+                          <td>接入</td>
+                          <td>mac地址</td>
+                          <td>掩码</td>
+                          <td>ipv6标识码</td>
+                        </tr>
+                      </thead>
+                      <tbody class="os-networkInterfaces"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-bg-12 col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">端口扫描</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-bg-6 col-md-6 col-sm-12">
+                  <p class="scanned-ports"></p>
+                  <button type="button" class="btn btn-default scan-btn scan-btn-localhost">扫描本地主机</button>
+                  <button type="button" class="btn btn-default scan-btn scan-btn-ip">扫描本机ip</button>
+                  <button type="button" class="btn btn-default scan-btn scan-btn-route">扫描路由</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade set-password-modal-lg">
+        <div class="modal-dialog modal-bg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4>这可能是你第一次使用本软件, 请先设置密码</h4>
+            </div>
+            <div class="modal-body">
+              <div class="alert alert-warning" role="warning">设置完成后每次使用本软件都需要输入密码, 你可以在个人设置中修改此密码。</div>
+              <div class="alert alert-danger set-password-alert-danger" role="alert"></div>
+              <form class="form-inline" role="form">
+                <div class="form-group">
+                  <label for="password">密码</label>
+                  <input type="password" class="form-control" name="set-password" placeholder="密码">
+                  <label for="password2">再次输入密码</label>
+                  <input type="password" class="form-control" name="set-password2" placeholder="再次输入密码">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary set-password-submit">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade password-modal-lg">
+        <div class="modal-dialog modal-bg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4>请输入密码</h4>
+            </div>
+            <div class="modal-body">
+              <div class="alert alert-danger password-alert-danger" role="alert"></div>
+              <form class="form-inline" role="form">
+                <div class="form-group">
+                  <label for="password">密码</label>
+                  <input type="password" class="form-control" name="password" placeholder="密码">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary password-submit">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="../javascripts/init.js"></script>
-    <script src="../javascripts/echarts.min.js"></script>
-    <script src="../../src/map/china.js"></script>
-    <script src="../../src/theme/dark.min.js"></script>
-    <script src="../javascripts/flow.js"></script>
+    <script src="../javascripts/main.js"></script>
   </body>
 </html>
