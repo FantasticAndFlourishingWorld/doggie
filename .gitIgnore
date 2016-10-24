@@ -2,9 +2,11 @@ node_modules/
 database/*.db
 .DS_Store
 .DS_Store?
+npm-debug.log
 bundle.js
 .pcap
 .so
+.dbdoc
 lib/py/*.pyc
 lib/py/scapy/*
 lib/py/parser.py

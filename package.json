@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "rebuild": "electron-rebuild",
-    "package": "electron-packager ./sniff-app-client smile darwin ./outApp/ --overwrite --version 1.4.1"
+    "package": "electron-packager ./sniff-app-client Doggie darwin ./outApp/ --overwrite --version 1.4.1"
   },
   "repository": {
     "type": "git",

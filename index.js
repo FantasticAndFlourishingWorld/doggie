@@ -17,6 +17,8 @@ var session = electron.session;
 var mainWindow = null;
 var settingsWindow = null;
 
+app.dock.setIcon(__dirname + '/lib/images/icon.png');
+
 function createWindow () {
 
   mainWindow = new BrowserWindow({
@@ -24,7 +26,7 @@ function createWindow () {
     height: 800,
     skipTaskbar: true,
     type: 'textured',
-
+    icon: __dirname + '/lib/images/icon.png'
   });
   mainWindow.loadURL(`file://${__dirname}/lib/html/index.html`);
 
@@ -47,7 +49,6 @@ function createWindow () {
     data.os.networkInterfaces = os.networkInterfaces();
     data.passwordKey = utils.readSettings('password_key');
     webContents.send('init', JSON.stringify(data));
-    // webContents.openDevTools();
   });
 
   mainWindow.on('closed', function () {
