@@ -7,10 +7,12 @@
     "darkly",
     "slate"
   ],
-  "themeIndex": 3,
+  "themeIndex": 0,
   "password_key": "ffworld",
   "blacklist": [
-    "www.baidu.com"
+    "hunnble.com",
+    "http://www.baidu.com",
+    "https://www.baidu.com"
   ],
   "bpf": [
     {

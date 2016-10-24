@@ -5,5 +5,5 @@ database/*.db
 bundle.js
 .pcap
 .so
-public/py/*.pyc
-public/py/scapy/*
+lib/py/*.pyc
+lib/py/scapy/*

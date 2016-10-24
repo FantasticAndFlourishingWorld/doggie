@@ -1,6 +1,9 @@
 html, body {
   height: 100%;
 }
+body {
+  background-image: url('../images/bg.png');
+}
 .fullHeight {
   height: 90%;
 }

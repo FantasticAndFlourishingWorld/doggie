@@ -2,7 +2,7 @@ var electron = require('electron');
 var os = require('os');
 var crypto = require('crypto');
 var evilscan = require('evilscan');
-var utils = require(__dirname + '/public/javascripts/utils.js');
+var utils = require(__dirname + '/lib/javascripts/utils.js');
 
 var globalShortcutMap = {
   'voice': 'Shift+s',
@@ -26,7 +26,7 @@ function createWindow () {
     type: 'textured',
 
   });
-  mainWindow.loadURL(`file://${__dirname}/public/html/index.html`);
+  mainWindow.loadURL(`file://${__dirname}/lib/html/index.html`);
 
   var webContents = mainWindow.webContents;
 

@@ -7,7 +7,7 @@
     <link rel="icon" href="" type="image/x-icon">
     <link rel="shortcut icon" href="" type="image/x-icon">
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../public/styles/main.css">
+    <link rel="stylesheet" href="../styles/main.css">
     <script typw="text/javascript">
       window.$ = window.jQuery = require(__dirname + '/../../node_modules/jquery/dist/jquery.min.js');
     </script>
@@ -57,8 +57,8 @@
                 <div class="panel-heading">页面设置</div>
                 <div class="panel-body">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-info">主题切换</button>
-                    <button type="button" class="btn btn-info dropdown-toggle settings-theme" data-toggle="dropdown">
+                    <button type="button" class="btn btn-primary">主题切换</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle settings-theme" data-toggle="dropdown">
                       <span class="caret"></span>
                       <span class="sr-only">Toggle Dropdown</span>
                     </button>
@@ -106,37 +106,6 @@
             </div>
           </div>
           <div class="col-bg-6 col-md-6 col-sm-6">
-
-            <div class="panel-group" role="tablist">
-              <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="collapseListGroupHeading">
-                  数据包详情
-                  <h4 class="panel-title">
-                    <a class="btn btn-default" data-toggle="collapse" href="#collapseEther" aria-expanded="true" aria-controls="collapseEther">链路层</a>
-                    <a class="btn btn-default" data-toggle="collapse" href="#collapseNetwork" aria-expanded="true" aria-controls="collapseNetwork">网络层</a>
-                    <a class="btn btn-default" data-toggle="collapse" href="#collapseTransport" aria-expanded="true" aria-controls="collapseTransport">传输层</a>
-                  </h4>
-                </div>
-                <div id="collapseEther" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading" aria-expanded="true">
-                  <ul class="list-group">
-                    <li class="list-group-item">Bootply</li>
-                    <li class="list-group-item">One itmus ac facilin</li>
-                    <li class="list-group-item">Second eros</li>
-                  </ul>
-                </div>
-                <div id="collapseNetwork" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading" aria-expanded="true">
-                  <ul class="list-group">
-                    <li class="list-group-item">One itmus ac facilin</li>
-                    <li class="list-group-item">Second eros</li>
-                  </ul>
-                </div>
-                <div id="collapseTransport" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading" aria-expanded="true">
-                  <ul class="list-group">
-                    <li class="list-group-item">Second eros</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
 
           </div>
 
@@ -196,9 +165,6 @@
             <h4>查看数据包</h4>
           </div>
           <div class="modal-body" id="pkt-info"></div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary password-submit">关闭</button>
-          </div>
         </div>
       </div>
     </div>
