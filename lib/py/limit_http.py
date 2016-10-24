@@ -39,13 +39,13 @@ def limitHttp():
         hosts = open(path, 'a')
         for url in sys.argv[2:]:
             hosts.write(ls)
-            hosts.writelines('0.0.0.0 %s' % url)
+            hosts.writelines('127.0.0.1 %s' % url)
             hosts.write(ls)
 
     hosts.close()
 
     for cmd in flushCmds:
-        os.system(cmd)
+        os.popen(cmd)
 
     print json.dumps({
         'success': True
