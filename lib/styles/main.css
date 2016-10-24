@@ -23,3 +23,6 @@ body {
 .block {
   height: 100px;
 }
+#pktChart {
+  height: 300px;
+}

@@ -15,4 +15,4 @@
 * 下载源码到本地
 * nodejs依赖安装：在源码根路径下执行命令 `npm install`
 * python模块安装：在源码根路径下执行命令 `pip install -r requirements.txt`
-* 测试：在源码根路径下执行命令 `electron .` 运行程序
+* 测试：在源码根路径下执行命令 `electron .` 运行程序(需要管理员/root权限)

@@ -7,3 +7,5 @@ bundle.js
 .so
 lib/py/*.pyc
 lib/py/scapy/*
+lib/py/parser.py
+lib/py/pcap.py

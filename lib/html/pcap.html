@@ -105,10 +105,7 @@
               <div class="panel-body text-muted" id="drop-file">将数据包文件拖拽到此处解析</div>
             </div>
           </div>
-          <div class="col-bg-6 col-md-6 col-sm-6">
-
-          </div>
-
+          <div class="col-bg-6 col-md-6 col-sm-6" id="pktChart"></div>
         </div>
       </div>
       <div class="row fixed-head-table-wrapper">
@@ -164,10 +161,15 @@
           <div class="modal-header">
             <h4>查看数据包</h4>
           </div>
-          <div class="modal-body" id="pkt-info"></div>
+          <div class="modal-body" id="pkt-info">
+            <ul class="nav nav-tabs" role="tablist"></ul>
+            <div class="tab-content"></div>
+          </div>
         </div>
       </div>
     </div>
+    <script src="../javascripts/echarts.min.js"></script>
+    <script src="../../src/theme/vintage.min.js"></script>
     <script src="../javascripts/init.js"></script>
     <script src="../javascripts/pcap.js"></script>
   </body>

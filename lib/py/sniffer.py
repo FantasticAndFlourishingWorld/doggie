@@ -34,18 +34,20 @@ def sniff_callback(pkt):
     if pktObj['protocol'] is 'HTTP':
         pass
 
-    print json.dumps({
-        "PROTOCOL": pktObj['protocol'],
-        "SPORT": sport,
-        "DPORT": dport,
-        "SIP": result.get('IP_src', ""),
-        "DIP": result.get('IP_dst', ""),
-        "SMAC": result.get('MAC_src', ""),
-        "DMAC": result.get('MAC_dst', ""),
-        "STIME": stime,
-        "PKTLEN": pktlen
-    })
-    sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime, pktlen])
+    # print json.dumps({
+    #     "PROTOCOL": pktObj['protocol'],
+    #     "SPORT": sport,
+    #     "DPORT": dport,
+    #     "SIP": result.get('IP_src', ""),
+    #     "DIP": result.get('IP_dst', ""),
+    #     "SMAC": result.get('MAC_src', ""),
+    #     "DMAC": result.get('MAC_dst', ""),
+    #     "STIME": stime,
+    #     "PKTLEN": pktlen
+    # })
+    print json.dumps(pktObj)
+
+    # sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime, pktlen])
 
 def sniff_index(sniff_prn, bpf):
     """The index of the sniff module"""
