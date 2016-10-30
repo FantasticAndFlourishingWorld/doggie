@@ -52,7 +52,7 @@ def sniff_callback(pkt):
     for key, value in pktObj['result'].iteritems():
         pktObj[key] = value
     del pktObj['result']
-    # sq.insertData(pktObj)
+    sq.insertData(keys=pktObj.keys(), values=pktObj.values())
 
 def sniff_index(sniff_prn, bpf):
     """The index of the sniff module"""

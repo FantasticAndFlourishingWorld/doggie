@@ -159,7 +159,7 @@ class SQLite():
         @param: values (list)
 
         """
-        keys, values = kw.keys(), kw.values()
+        keys, values = kw['keys'], kw['values']
 
         lname =''
         proname=''
@@ -178,11 +178,12 @@ class SQLite():
         conn = sqlite3.connect(self.dbPath)
 
         for value in values:
-            if value.isdigit()!=True:
-                v=values.index(value)
-                values[v] ="'"+value+"'"
-        # list_1 = ['protocol','packet','time','length','http','UDP_len']
-        global list_1
+            v=values.index(value)
+            values[v], value = str(value), str(values[v])
+            values[v] ="'"+value+"'"
+            # if value.isdigit()!=True:
+                # values[v] ="'"+value+"'"
+        list_1 = ['protocol','packet','time','length','http','UDP_len']
         #找出主表对应属性
         mts=set(list_1)
         ks=set(keys)
@@ -196,13 +197,11 @@ class SQLite():
 
         mainkeysStr = ','.join(mainkeys)
         mainvaluesStr = ','.join(mainvalues)
-        a="INSERT INTO  Maintable  (" + mainkeysStr + ")"+"VALUES"+"(" + mainvaluesStr + ")"
-        print a
-        conn.execute("INSERT INTO  Maintable  (" + mainkeysStr + ")"+"VALUES"+"(" + mainvaluesStr + ")")
+        a="INSERT INTO  Maintable  (" + mainkeysStr + ")"+" VALUES "+"(" + mainvaluesStr + ")"
+        conn.execute("INSERT INTO  Maintable  (" + mainkeysStr + ")"+" VALUES "+"(" + mainvaluesStr + ")")
         conn.commit()
         #找出连接层对应的属性
-        # list_2 = ['MAC_dst','MAC_src','pkt_type']
-        global list_2
+        list_2 = ['MAC_dst','MAC_src','pkt_type']
         mts=set(list_2)
         ks=set(keys)
         makey=ks&mts #取交集
@@ -216,17 +215,16 @@ class SQLite():
         etherkeysStr = ','.join(etherkeys)
         ethervaluesStr = ','.join(ethervalues)
         a="INSERT INTO  Entertable (prid," + etherkeysStr + ")"+"VALUES"+"((SELECT max(prid) FROM Maintable)," + ethervaluesStr + ")"
-        print a
+        # print a
         conn.execute(a)
         conn.commit()
         #找出对应副表的属性
-        global list_3, list_4, list_5
-        # list_3 = ['version','ihl','tos','pkt_len','pkt_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
-                #   'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst']
-        #Transprt keys
-        # list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','pkt_len']
+        list_3 = ['version','ihl','tos','pkt_len','pkt_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
+                  'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst']
+        # Transprt keys
+        list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','pkt_len']
         #Application keys
-        # list_5 = ['url','protocol_edition','state_code','state_code_description','response_head','response_body']
+        list_5 = ['url','protocol_edition','state_code','state_code_description','response_head','response_body']
 
         mts=[]
         if (res==3) :
@@ -238,19 +236,20 @@ class SQLite():
         ks=set(keys)
         makey=ks&mts #取交集
         tkeys=list(makey)
-        tvalues=[]
-        for tkey in tkeys:
-            n=tkeys.index(tkey)
-            tvalues.append(values[n])
 
+        if len(tkeys) > 0:
+            tvalues=[]
+            for tkey in tkeys:
+                n=tkeys.index(tkey)
+                tvalues.append(values[n])
 
-        tkeysStr = ','.join(tkeys)
-        tvaluesStr = ','.join(tvalues)
+            tkeysStr = ','.join(tkeys)
+            tvaluesStr = ','.join(tvalues)
 
-        a="INSERT INTO "+ proname + " (prid," + tkeysStr + ")"+"VALUES"+"((SELECT max(prid) FROM Maintable)," + tvaluesStr + ")"
-        print a
-        conn.execute(a)
-        conn.commit()
+            a="INSERT INTO "+ proname + " (prid," + tkeysStr + ")"+"VALUES"+"((SELECT max(prid) FROM Maintable)," + tvaluesStr + ")"
+            conn.execute(a)
+            conn.commit()
+
         conn.close()
         # print "insert successfully"
 
@@ -357,9 +356,11 @@ class SQLite():
         keysStr=','.join(keys).upper()
 
         for con_value in con_values:
-            if con_value.isdigit()!=True:
-                v=con_values.index(con_value)
-                con_values[v] ="'"+con_value+"'"
+            v=con_values.index(con_value)
+            con_value, con_values[v] = str(con_value), str(con_values[v])
+            con_values[v] ="'"+con_value+"'"
+            # if con_values[v].isdigit()!=True:
+                # con_values[v] ="'"+con_value+"'"
 
         con_vas=[]
         for condition in conditions:
