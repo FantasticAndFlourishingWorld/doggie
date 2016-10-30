@@ -8,7 +8,7 @@ def show_http_packet(packet):
         protocol_edition=state_line[0]
         state_code=state_line[1]
         state_code_description=state_line[2]
-        
+
         i=1
         response_head={}
         while len(temphttp[i])>0:
@@ -16,8 +16,8 @@ def show_http_packet(packet):
             value=temphttp[i].split(':')[1]
             response_head[head_name]=value
             i=i+1
-        
-        response_body=temphttp[-1]
+
+        response_body = temphttp[-1].decode("hex")
         return {"protocol_edition":protocol_edition,"state_code":state_code,"state_code_description":state_code_description,
                 "response_head":response_head,
                 "response_body":response_body}
@@ -29,15 +29,15 @@ def show_http_packet(packet):
         url=request_line[1]
         protocol_edition=request_line[2]
         i=1
-        
+
         request_head={}
         while len(temphttp[i])>0:
             head_name=temphttp[i].split(':')[0]
             value=temphttp[i].split(':')[1]
             request_head[head_name]=value
             i=i+1
-        
-        request_body=temphttp[-1]
+
+        request_body = temphttp[-1].decode("hex")
         return {"request_method":request_method,"protocol_edition":protocol_edition,
                "request_head":request_head,
-               "request_body":request_body}   
+               "request_body":request_body}

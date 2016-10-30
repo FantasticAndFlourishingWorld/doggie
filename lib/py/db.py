@@ -44,7 +44,7 @@ class SQLite():
 
     def __init__(self, dbName, dbPath):
         self.dbName = dbName
-        self.dbPath = dbPath + dbName.lower() + ".db"
+        self.dbPath = dbPath + '/' + dbName.lower() + ".db"
         # self.dbPath = os.getcwd() + "/database/" + dbName.lower() + ".db"
 
     def  createMain(self):

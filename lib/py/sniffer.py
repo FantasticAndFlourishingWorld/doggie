@@ -5,7 +5,7 @@ import json
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from cbd import SQLite
+from db import SQLite
 from function_flypaper import flypaper
 
 sq = SQLite("PACKET", sys.argv[1])
@@ -19,16 +19,16 @@ def sniff_callback(pkt):
     if not pktObj:
         return None
 
-    protocol = "'" + pktObj['protocol'] + "'"
-    result = pktObj['result']
-    sport = str(result.get('sport', "0"))
-    dport = str(result.get('dport', "0"))
-    sip = "'" + result.get('IP_src', "") + "'"
-    dip = "'" + result.get('IP_dst', "") + "'"
-    smac = "'" + result.get('MAC_src', "") + "'"
-    dmac = "'" + result.get('MAC_dst', "") + "'"
-    stime = str(int(pktObj.get('time', 0) * 1000))
-    pktlen = str(pktObj.get('length', "0"))
+    # protocol = "'" + pktObj['protocol'] + "'"
+    # result = pktObj['result']
+    # sport = str(result.get('sport', "0"))
+    # dport = str(result.get('dport', "0"))
+    # sip = "'" + result.get('IP_src', "") + "'"
+    # dip = "'" + result.get('IP_dst', "") + "'"
+    # smac = "'" + result.get('MAC_src', "") + "'"
+    # dmac = "'" + result.get('MAC_dst', "") + "'"
+    # stime = str(int(pktObj.get('time', 0) * 1000))
+    # pktlen = str(pktObj.get('length', "0"))
 
     httpInfo = {}
     if pktObj['protocol'] is 'HTTP':
@@ -45,9 +45,14 @@ def sniff_callback(pkt):
     #     "STIME": stime,
     #     "PKTLEN": pktlen
     # })
+
     print json.dumps(pktObj)
 
     # sq.insertData(keys, [protocol, sport, dport, smac, dmac, sip, dip, stime, pktlen])
+    for key, value in pktObj['result'].iteritems():
+        pktObj[key] = value
+    del pktObj['result']
+    # sq.insertData(pktObj)
 
 def sniff_index(sniff_prn, bpf):
     """The index of the sniff module"""
