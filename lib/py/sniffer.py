@@ -9,42 +9,19 @@ from db import SQLite
 from function_flypaper import flypaper
 
 sq = SQLite("PACKET", sys.argv[1])
-keys = ["PROTOCOL", "SPORT", "DPORT", "SMAC", "DMAC", "SIP", "DIP", "STIME", "PLEN"]
 
 def sniff_callback(pkt):
     """Show packet"""
-    global keys, sq
+    global sq
 
     pktObj = flypaper(pkt)
-    if not pktObj:
+    if not pktObj or pktObj['protocol'] is 'BAD_PACKET':
         return None
 
-    # protocol = "'" + pktObj['protocol'] + "'"
-    # result = pktObj['result']
-    # sport = str(result.get('sport', "0"))
-    # dport = str(result.get('dport', "0"))
-    # sip = "'" + result.get('IP_src', "") + "'"
-    # dip = "'" + result.get('IP_dst', "") + "'"
-    # smac = "'" + result.get('MAC_src', "") + "'"
-    # dmac = "'" + result.get('MAC_dst', "") + "'"
-    # stime = str(int(pktObj.get('time', 0) * 1000))
-    # pktlen = str(pktObj.get('length', "0"))
-
-    httpInfo = {}
     if pktObj['protocol'] is 'HTTP':
-        pass
-
-    # print json.dumps({
-    #     "PROTOCOL": pktObj['protocol'],
-    #     "SPORT": sport,
-    #     "DPORT": dport,
-    #     "SIP": result.get('IP_src', ""),
-    #     "DIP": result.get('IP_dst', ""),
-    #     "SMAC": result.get('MAC_src', ""),
-    #     "DMAC": result.get('MAC_dst', ""),
-    #     "STIME": stime,
-    #     "PKTLEN": pktlen
-    # })
+        for key, value in pktObj['http'].iteritems():
+            pktObj[key] = value
+        del pktObj['http']
 
     print json.dumps(pktObj)
 

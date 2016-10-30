@@ -10,24 +10,21 @@ from function_flypaper import flypaper
 def read_pcap(path):
     """Read pcap file"""
     pkts = rdpcap(path)
-    results = []
+    pktObjs = []
     for pkt in pkts:
-        pkt = flypaper(pkt)
-        pktResult = pkt['result']
-        result = {}
-        result['SMAC'] = pktResult.get('MAC_src', None)
-        result['DMAC'] = pktResult.get('MAC_dst', None)
-        result['SPORT'] = pktResult.get('sport', '0')
-        result['DPORT'] = pktResult.get('dport', '0')
-        result['SIP'] = pktResult.get('IP_src', None)
-        result['DIP'] = pktResult.get('IP_dst', None)
-        result['PROTOCOL'] = pkt.get('protocol', None)
-        result['STIME'] = pkt.get('time', 0) * 1000
+        pktObj = flypaper(pkt)
+        if not pktObj:
+            return None
 
-        results.append(result)
+        if pktObj['protocol'] is 'HTTP':
+            for key, value in pktObj['http'].iteritems():
+                pktObj[key] = value
+            del pktObj['http']
+
+        pktObjs.append(pktObj)
 
 
-    print json.dumps({ "pkts": results })
+    print json.dumps({ "pkts": pktObjs })
 
 if __name__ == '__main__':
     read_pcap(sys.argv[1])

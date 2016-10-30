@@ -368,7 +368,12 @@ class SQLite():
             con_vas.append(conditions[a].upper()+"="+con_values[a].upper())
 
         con_vaStr=' AND '.join(con_vas)
-        bb="SELECT " + keysStr + " FROM Maintable INNER JOIN Entertable INNER JOIN "+ proname + " ON ((Maintable.prid=Entertable.prid)&(Entertable.prid="+proname+".prid)) WHERE "+con_vaStr
+        bb="SELECT " + keysStr + " FROM Maintable INNER JOIN Entertable INNER JOIN " + proname + " "
+        if proname:
+            bb += " INNER JOIN " + proname
+        bb += " ON ((Maintable.prid=Entertable.prid)&(Entertable.prid="+proname+".prid)) "
+        if con_vaStr:
+            bb += "WHERE " + con_vaStr
 
         #返回字典
         cursor = conn.execute(bb)
@@ -381,6 +386,7 @@ class SQLite():
         conn.close()
         #print result
         return result
+
     def deleteTable(self,tablename):
         '''
         deleteTable
