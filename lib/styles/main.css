@@ -23,6 +23,6 @@ body {
 .block {
   height: 100px;
 }
-#pktChart, #pcap-detail .panel {
+#pktChart, #pcap-detail .panel-body {
   height: 200px;
 }

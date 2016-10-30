@@ -17,7 +17,9 @@ var session = electron.session;
 var mainWindow = null;
 var settingsWindow = null;
 
-app.dock.setIcon(__dirname + '/lib/images/icon.png');
+if (process.platform === 'darwin') {
+  app.dock.setIcon(__dirname + '/lib/images/icon.png');
+}
 
 function createWindow () {
 
@@ -25,6 +27,7 @@ function createWindow () {
     width: 1200,
     height: 800,
     skipTaskbar: true,
+    title: 'Doggie',
     type: 'textured',
     icon: __dirname + '/lib/images/icon.png'
   });

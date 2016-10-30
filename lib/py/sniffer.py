@@ -5,7 +5,7 @@ import json
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from db import SQLite
+from cbd import SQLite
 from function_flypaper import flypaper
 
 sq = SQLite("PACKET", sys.argv[1])
@@ -57,5 +57,9 @@ def sniff_index(sniff_prn, bpf):
         sniff(prn=sniff_prn, store=0)
 
 if __name__ == '__main__':
-    sq.createTable()
+    sq.createMain()
+    sq.createEther()
+    sq.createNetwork()
+    sq.createTransport()
+    sq.createApplication()
     sniff_index(sniff_callback, sys.argv[2] if len(sys.argv) > 2 else None)
