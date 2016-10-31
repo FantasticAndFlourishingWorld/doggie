@@ -3,6 +3,7 @@
 import sqlite3
 import sys
 import os
+import time 
 def judgepro(keys,values):
     """
     judge if protocol in keys is true and return the tables need to be connected
@@ -34,12 +35,15 @@ def judgepro(keys,values):
     #Ether keys
     list_2 = ['MAC_dst','MAC_src','pkt_type']
     #Network keys
-    list_3 = ['version','ihl','tos','pkt_len','pkt_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
-    'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst']
+    list_3 = ['version','ihl','tos','IP_len','IP_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
+                  'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst','src_longitude',
+                  'src_latitude','dst_latitude','dat_longitude']
     #Transprt keys
     list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','pkt_len']
     #Application keys
-    list_5 = ['url','protocol_edition','state_code','state_code_description','response_head','response_body']
+    list_5 = ['url','protocol_edition','state_code','state_code_description','Content_Length','SINA_LB','Server','Connection',
+            'Api_Server_IP','SINA_TS','Date','Content_Type','Accept_Language','Accept_Encoding','Accept','User_Agent',
+            'Host','Referer','Cookie','response_body']
 class SQLite():
 
     def __init__(self, dbName, dbPath):
@@ -86,8 +90,8 @@ class SQLite():
             version TEXT,
             ihl TEXT,
             tos TEXT,
-            pkt_len TEXT,
-            pkt_id TEXT,
+            IP_len TEXT,
+            IP_id TEXT,
             flags TEXT,
             frag TEXT,
             ttl TEXT,
@@ -109,9 +113,13 @@ class SQLite():
             hwsrc TEXT,
             psrc TEXT,
             hwdst TEXT,
-            pdst TEXT
-            );''')
+            pdst TEXT,
+            src_longitude TEXT,
+            src_latitude TEXT,
+            dst_latitude TEXT,
+            dat_longitude TEXT
 
+            );''')
         conn.close()
         # print "successfully"
 
@@ -144,9 +152,24 @@ class SQLite():
             protocol_edition TEXT,
             state_code TEXT,
             state_code_description TEXT,
-            response_head TEXT,
+            Content_Length TEXT,
+            SINA_LB TEXT,
+            Server TEXT,
+            Connection TEXT,
+            Api_Server_IP TEXT,
+            SINA_TS TEXT,
+            Date TEXT,
+            Content_Type TEXT,
+            Accept_Language TEXT,
+            Accept_Encoding TEXT,
+            Accept TEXT,
+            User_Agent TEXT,
+            Host TEXT,
+            Referer TEXT,
+            Cookie TEXT,
             response_body TEXT
             );''')
+
 
         conn.close()
 
@@ -219,12 +242,15 @@ class SQLite():
         conn.execute(a)
         conn.commit()
         #找出对应副表的属性
-        list_3 = ['version','ihl','tos','pkt_len','pkt_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
-                  'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst']
+        list_3 = ['version','ihl','tos','IP_len','IP_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
+                  'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst','src_longitude',
+                  'src_latitude','dst_latitude','dat_longitude']
         # Transprt keys
         list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','pkt_len']
         #Application keys
-        list_5 = ['url','protocol_edition','state_code','state_code_description','response_head','response_body']
+        list_5 = ['url','protocol_edition','state_code','state_code_description','Content_Length','SINA_LB','Server','Connection',
+                  'Api_Server_IP','SINA_TS','Date','Content_Type','Accept_Language','Accept_Encoding','Accept','User_Agent',
+                  'Host','Referer','Cookie','response_body']
 
         mts=[]
         if (res==3) :
@@ -276,12 +302,12 @@ class SQLite():
                 'UDP_len',
                 'MAC_dst',
                 'MAC_src',
-                'pkt_type',
+                'IP_type',
                 'version',
                 'ihl',
                 'tos',
-                'pkt_len',
-                'pkt_id',
+                'IP_len',
+                'IP_id',
                 'flags',
                 'frag',
                 'ttl',
@@ -303,7 +329,11 @@ class SQLite():
                 'hwsrc',
                 'psrc',
                 'hwdst',
-                'pdst'
+                'pdst',
+                'src_longitude',
+                'src_latitude',
+                'dst_latitude',
+                'dat_longitude'
                 ]
         elif(res==4):
             lname ='list_4'
@@ -344,14 +374,29 @@ class SQLite():
                 'UDP_len',
                 'MAC_dst',
                 'MAC_src',
-                'pkt_type',
+                'IP_type',
                 'url',
                 'protocol_edition',
                 'state_code',
                 'state_code_description',
-                'response_head',
+                'Content_Length',
+                'SINA_LB',
+                'Server',
+                'Connection',
+                'Api_Server_IP',
+                'SINA_TS',
+                'Date',
+                'Content_Type',
+                'Accept_Language',
+                'Accept_Encoding',
+                'Accept',
+                'User_Agent',
+                'Host',
+                'Referer',
+                'Cookie',
                 'response_body'
                 ]
+                
         # print keys
         keysStr=','.join(keys).upper()
 
@@ -422,19 +467,21 @@ class SQLite():
         conn.commit()
         conn.close()
 
-    def timeDelete(self):
+  def timeDelete(self):
         '''
         timeDeletede  data
+
         '''
         print "How long do you want to save those data ?"
         wishtime = raw_input()
-        DATE = time.localtime()[3]
+        DATE = time.localtime()[2]
         conn =sqlite3.connect(self.dbPath)
-        conn.execute("DELETE FROM Maintable" + "WHERE time < (" + DATE + " - " + wishtime+")")
-        conn.execute("DELETE FROM Ethertable" + "WHERE time < (" + DATE + " - " + wishtime+")")
-        conn.execute("DELETE FROM Networktable" + "WHERE time < (" + DATE + " - " + wishtime+")")
-        conn.execute("DELETE FROM Applicationtable" + "WHERE time < (" + DATE + " - " + wishtime+")")
-        conn.execute("DELETE FROM Transporttable" + "WHERE time < (" + DATE + " - " + wishtime+")")
-        conn.execute("VACUUM")
+        time = DATE - intern(wishtime)
+        conn.execute("DELETE FROM " + self.dbName + ".Maintable" + "WHERE time < (" + time +")")
+        conn.execute("DELETE FROM " + self.dbName + ".Ethertable" + "WHERE time < (" + time +")")
+        conn.execute("DELETE FROM " + self.dbName + ".Networktable" + "WHERE time < (" + time +")")
+        conn.execute("DELETE FROM " + self.dbName + ".Applicationtable" + "WHERE time < (" + time +")")
+        conn.execute("DELETE FROM " + self.dbName + ".Transporttable" + "WHERE time < (" + time +")")
         conn.commit()
         conn.close()
+
