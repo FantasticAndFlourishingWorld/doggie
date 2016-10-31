@@ -1,0 +1,678 @@
+# -*-coding:utf-8 -*-
+import sqlite3
+import sys
+import os
+import time
+
+def dict_list(dic,ks,vs ):
+    ks.extend(dic.keys())
+    vs.extend(dic.values())
+def list_dict(ks,vas):
+    nvs = zip(ks,vas)
+    nvDict=dict((k,va)for k,va in nvs)
+    return nvDict
+def judgepro(keys,values):
+    """
+    judge if protocol in keys is true and return the tables need to be connected
+    @ keys(list)
+    @ values(list)
+    """
+    k=-1
+
+    if 'protocol' in keys:
+        k=keys.index("protocol")
+
+    if(k!=-1):
+        '''
+        1 means intertable
+        '''
+        if ((values[k]=='IPv4')|(values[k]=='IPv6')|(values[k]=='ARP')):
+            k= 3
+        elif ((values[k]=='TCP')|(values[k]=='UDP')):
+            k= 4#'Transporttable'
+        else:
+            k= 5#'Applicationtable'
+
+
+    return k
+
+
+    list_1= ['protocol','packet','time','length','http','UDP_len']
+    #Ether keys
+    list_2 = ['MAC_dst','MAC_src','IP_type']
+    #Network keys
+    list_3 = ['version','ihl','tos','IP_len','IP_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
+    'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst','src_longitude','src_latitude','dst_latitude','dat_longitude']
+    #Transprt keys
+    list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','IP_len']
+    #Application keys
+    list_5 = ['url','protocol_edition','state_code','state_code_description','response_head','response_body']
+class SQLite():
+
+    def __init__(self, dbName, dbPath):
+        self.dbName = dbName
+        self.dbPath = dbPath + dbName.lower() + ".db"
+        # self.dbPath = os.getcwd() + "/database/" + dbName.lower() + ".db"
+
+    def  createMain(self):
+        conn= sqlite3.connect(self.dbPath)
+        a='''CREATE TABLE IF NOT EXISTS Maintable '''+'''
+            (prid1 INTEGER PRIMARY KEY AUTOINCREMENT,
+            protocol TEXT,
+            packet TEXT,
+            time TEXT,
+            length TEXT,
+            http TEXT,
+            UDP_len TEXT)
+            ;'''
+
+        conn.execute(a)
+        conn.close()
+
+
+    def createEther(self):
+        conn= sqlite3.connect(self.dbPath)
+        a='''CREATE TABLE IF NOT EXISTS Entertable '''+'''
+            (
+            prid2 INTEGER PRIMARY KEY,
+            MAC_dst TEXT,
+            MAC_src TEXT,
+            IP_type TEXT
+            );'''
+
+        conn.execute(a)
+
+        conn.close()
+
+
+    def  createNetwork(self):
+        conn= sqlite3.connect(self.dbPath)
+        conn.execute('''CREATE TABLE IF NOT EXISTS Networktable '''+'''
+            (
+            prid3 INTEGER PRIMARY KEY,
+            version TEXT,
+            ihl TEXT,
+            tos TEXT,
+            IP_len TEXT,
+            IP_id TEXT,
+            flags TEXT,
+            frag TEXT,
+            ttl TEXT,
+            proto TEXT,
+            IP_chksum TEXT,
+            IP_src TEXT,
+            IP_dst TEXT,
+            tc TEXT,
+            fl TEXT,
+            plen TEXT,
+            nh TEXT,
+            hilm TEXT,
+            IPv6_src TEXT,
+            IPv6_dst TEXT,
+            hwtype TEXT,
+            ptype TEXT,
+            hwlen TEXT,
+            op TEXT,
+            hwsrc TEXT,
+            psrc TEXT,
+            hwdst TEXT,
+            pdst TEXT,
+            src_longitude TEXT,
+            src_latitude TEXT,
+            dst_latitude TEXT,
+            dat_longitude TEXT
+
+            );''')
+
+        conn.close()
+
+
+    def createTransport(self):
+        conn= sqlite3.connect(self.dbPath)
+        conn.execute('''CREATE TABLE IF NOT EXISTS Transporttable '''+'''
+            (
+            prid3 INTEGER PRIMARY KEY,
+            sport TEXT,
+            dport TEXT,
+            seq TEXT,
+            ack TEXT,
+            dataofs TEXT,
+            reserved TEXT,
+            TCP_flags TEXT,
+            window TEXT,
+            chksum TEXT,
+            urgptr TEXT,
+            IP_len TEXT
+            );''')
+
+        conn.close()
+
+
+    def createApplication(self):
+        conn= sqlite3.connect(self.dbPath)
+        conn.execute('''CREATE TABLE IF NOT EXISTS Applicationtable '''+'''
+            (
+            prid3 INTEGER PRIMARY KEY,
+            url TEXT,
+            protocol_edition TEXT,
+            state_code TEXT,
+            state_code_description TEXT,
+            Content_Length TEXT,
+            SINA_LB TEXT,
+            Server TEXT,
+            Connection TEXT,
+            Api_Server_IP TEXT,
+            SINA_TS TEXT,
+            Date TEXT,
+            Content_Type TEXT,
+            Accept_Language TEXT,
+            Accept_Encoding TEXT,
+            Accept TEXT,
+            User_Agent TEXT,
+            Host TEXT,
+            Referer TEXT,
+            Cookie TEXT,
+            response_body TEXT
+            );''')
+
+        conn.close()
+
+    def insertData(self,dic):
+        """
+        Insert data into database
+        @param: dic(dict)
+
+        """
+        keys=[]
+        values=[]
+        dict_list(dic,keys,values)
+
+        lname =''
+        proname=''
+        res=judgepro(keys,values)
+        if (res==3) :
+
+            proname ='Networktable'
+        elif(res==4):
+
+            proname ='Transporttable'
+        else:
+
+            proname ='Applicationtable'
+
+
+        conn = sqlite3.connect(self.dbPath)
+
+        for value in values:
+            if value.isdigit()!=True:
+                v=values.index(value)
+                values[v] ="'"+value+"'"
+        list_1 = ['protocol','packet','time','length','http','UDP_len']
+        #找出主表对应属性
+        mts=set(list_1)
+        ks=set(keys)
+        makey=ks&mts #取交集
+        mainkeys=list(makey)
+        mainvalues=[]
+        for mainkey in mainkeys:
+            n=keys.index(mainkey)
+            mainvalues.append(values[n])
+        #往主表插入数据
+
+        mainkeysStr = ','.join(mainkeys)
+        mainvaluesStr = ','.join(mainvalues)
+        a="INSERT INTO  Maintable  (" + mainkeysStr + ")"+"VALUES"+"(" + mainvaluesStr + ")"
+
+        conn.execute("INSERT INTO  Maintable  (" + mainkeysStr + ")"+"VALUES"+"(" + mainvaluesStr + ")")
+        conn.commit()
+        #找出连接层对应的属性
+        list_2 = ['MAC_dst','MAC_src','IP_type']
+        mts=set(list_2)
+        ks=set(keys)
+        makey=ks&mts #取交集
+        etherkeys=list(makey)
+        ethervalues=[]
+        for etherkey in etherkeys:
+            n=keys.index(etherkey)
+            ethervalues.append(values[n])
+
+
+        etherkeysStr = ','.join(etherkeys)
+        ethervaluesStr = ','.join(ethervalues)
+        a="INSERT INTO  Entertable (prid2," + etherkeysStr + ")"+"VALUES"+"((SELECT max(prid1) FROM Maintable)," + ethervaluesStr + ")"
+
+        conn.execute(a)
+        conn.commit()
+        #找出对应副表的属性
+        list_3 = ['version','ihl','tos','IP_len','IP_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
+                  'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst','src_longitude',
+                  'src_latitude','dst_latitude','dat_longitude']
+        #Transprt keys
+        list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','IP_len']
+        #Application keys
+        list_5 = ['url','protocol_edition','state_code','state_code_description','Content_Length','SINA_LB','Server','Connection',
+        'Api_Server_IP','SINA_TS','Date','Content_Type','Accept_Language','Accept_Encoding','Accept','User_Agent',
+        'Host','Referer','Cookie','response_body']
+
+        mts=[]
+        if (res==3) :
+            mts=set(list_3)
+        elif(res==4):
+            mts=set(list_4)
+        else:
+            mts=set(list_5)
+        ks=set(keys)
+        makey=ks&mts #取交集
+        tkeys=list(makey)
+        tvalues=[]
+        for tkey in tkeys:
+            n=tkeys.index(tkey)
+            tvalues.append(values[n])
+
+
+        tkeysStr = ','.join(tkeys)
+        tvaluesStr = ','.join(tvalues)
+
+        a="INSERT INTO "+ proname + " (prid3," + tkeysStr + ")"+"VALUES"+"((SELECT max(prid1) FROM Maintable)," + tvaluesStr + ")"
+
+        conn.execute(a)
+        conn.commit()
+        conn.close()
+
+
+    def selectData(self, conditions, con_values, keys=None):
+        """
+        Select data from database
+        @param: conditions (list)
+        @param: con_values (list)
+        @param: keys(list)
+        @return: result (list)
+        """
+        conn = sqlite3.connect(self.dbPath)
+        proname=''
+        res=judgepro(conditions, con_values)
+        if (res==3) :
+            proname ='Networktable'
+            if keys==None:
+                keys=[
+                'protocol',
+                'packet',
+                'time',
+                'length',
+                'http',
+                'UDP_len',
+                'MAC_dst',
+                'MAC_src',
+                'IP_type',
+                'version',
+                'ihl',
+                'tos',
+                'IP_len',
+                'IP_id',
+                'flags',
+                'frag',
+                'ttl',
+                'proto',
+                'IP_chksum',
+                'IP_src',
+                'IP_dst',
+                'tc',
+                'fl',
+                'plen',
+                'nh',
+                'hilm',
+                'IPv6_src',
+                'IPv6_dst',
+                'hwtype',
+                'ptype',
+                'hwlen',
+                'op',
+                'hwsrc',
+                'psrc',
+                'hwdst',
+                'pdst',
+                'src_longitude',
+                'src_latitude',
+                'dst_latitude',
+                'dat_longitude'
+                ]
+        elif(res==4):
+            lname ='list_4'
+            proname ='Transporttable'
+            if keys==None:
+                keys=[
+                'protocol',
+                'packet',
+                'time',
+                'length',
+                'http',
+                'UDP_len',
+                'MAC_dst',
+                'MAC_src',
+                'IP_type',
+                'sport',
+                'dport',
+                'seq',
+                'ack',
+                'dataofs',
+                'reserved',
+                'TCP_flags',
+                'window',
+                'chksum',
+                'urgptr',
+                'IP_len'
+                ]
+        else:
+            lname ='list_5'
+            proname ='Applicationtable'
+            if keys==None:
+                keys=[
+                'protocol',
+                'packet',
+                'time',
+                'length',
+                'http',
+                'UDP_len',
+                'MAC_dst',
+                'MAC_src',
+                'IP_type',
+                'url',
+                'protocol_edition',
+                'state_code',
+                'state_code_description',
+                'Content_Length',
+                'SINA_LB',
+                'Server',
+                'Connection',
+                'Api_Server_IP',
+                'SINA_TS',
+                'Date',
+                'Content_Type',
+                'Accept_Language',
+                'Accept_Encoding',
+                'Accept',
+                'User_Agent',
+                'Host',
+                'Referer',
+                'Cookie',
+                'response_body'
+                ]
+
+        keysStr=','.join(keys)
+
+        for con_value in con_values:
+            if con_value.isdigit()!=True:
+                v=con_values.index(con_value)
+                con_values[v] ="'"+con_value+"'"
+
+        con_vas=[]
+        for condition in conditions:
+            a=conditions.index(condition)
+            con_vas.append(conditions[a].upper()+"="+con_values[a].upper())
+
+        con_vaStr=' AND '.join(con_vas)
+        bb="SELECT " + keysStr + " FROM Maintable INNER JOIN Entertable INNER JOIN "+ proname + " ON ((Maintable.prid1=Entertable.prid2)&(Entertable.prid2="+proname+".prid3)) WHERE "+con_vaStr
+
+        #返回字典
+        cursor = conn.execute(bb)
+        result = []
+
+        for rows in cursor:
+            nvs = zip(keys,rows)
+            nvDict = dict( (key,row) for key,row in nvs)
+            result.append(nvDict)
+        conn.close()
+
+        return result
+
+    def deleteTable(self,tablename=None):
+        '''
+        deleteTable
+        @param tablename(string)
+        '''
+        conn =sqlite3.connect(self.dbPath)
+        if tablename ==None:
+            conn.execute("DELETE FROM Maintable")
+            conn.commit()
+            conn.execute("VACUUM")
+            conn.commit()
+            conn.execute("DELETE FROM Entertable")
+            conn.commit()
+            conn.execute("VACUUM")
+            conn.commit()
+            conn.execute("DELETE FROM Networktable")
+            conn.commit()
+            conn.execute("VACUUM")
+            conn.commit()
+            conn.execute("DELETE FROM Transporttable")
+            conn.commit()
+            conn.execute("VACUUM")
+            conn.commit()
+            conn.execute("DELETE FROM Applicationtable")
+            conn.commit()
+            conn.execute("VACUUM")
+            conn.commit()
+        else:
+
+            conn.execute("DELETE FROM " + tablename)
+            conn.commit()
+            conn.execute("VACUUM")
+            conn.commit()
+            conn.close()
+
+    def deleteData(self,conditions, con_values):
+        '''
+        @param: conditions (list)
+        @param: con_values (list)
+        '''
+        proname=''
+        res=judgepro(conditions, con_values)
+        if (res==3) :
+
+            proname ='Networktable'
+        elif(res==4):
+
+            proname ='Transporttable'
+
+        else:
+
+            proname ='Applicationtable'
+
+        tabs={'Maintable':'prid1','Entertable':'prid2',proname:'prid3'}
+        di=self.selectData(conditions, con_values,['prid1'])
+
+        aa=[]
+        for d in di:
+            aa.extend(d.values())
+
+
+        #一个prid的list
+        conn = sqlite3.connect(self.dbPath)
+        for va in aa:
+            for tab in tabs.keys():
+                bb="DELETE FROM "+tab+" WHERE "+tabs[tab]+" = "+str(va)
+
+
+                conn.execute(bb)
+
+
+
+        conn.commit()
+        conn.close()
+
+    def updataData(self,conditions,con_values,changcos,changvas):
+        '''
+        @param: conditions (list)
+        @param: con_values (list)
+        @param: changcos (list)
+        @param: changvas (list)
+
+        '''
+        proname=''
+        res=judgepro(conditions, con_values)
+        if (res==3) :
+
+            proname ='Networktable'
+        elif(res==4):
+
+            proname ='Transporttable'
+
+        else:
+
+            proname ='Applicationtable'
+
+        tabs={'Maintable':'prid1','Entertable':'prid2',proname:'prid3'}
+        di=self.selectData(conditions, con_values,['prid1'])
+
+        aa=[]
+        for d in di:
+            aa.extend(d.values())
+
+
+        #一个prid的list
+        conn = sqlite3.connect(self.dbPath)
+        for changva in changvas:
+                if changva.isdigit()!=True:
+                    v=changvas.index(changva)
+                    changvas[v] ="'"+changva+"'"
+        for va in aa:
+
+            list_1 = ['protocol','packet','time','length','http','UDP_len']
+            #找出主表对应属性
+            mts=set(list_1)
+            ks=set(changcos)
+            makey=ks&mts #取交集
+            if makey !=set([]):
+                mainkeys=list(makey)
+                mainvalues=[]
+                for mainkey in mainkeys:
+                    n=changcos.index(mainkey)
+                    mainvalues.append(mainkey+" = "+changvas[n])
+
+                #更改主表数据
+
+                mainkeysStr = ','.join(mainvalues)
+
+                a="UPDATE  Maintable  SET " + mainkeysStr +" WHERE prid1 = " +str(va)
+
+                conn.execute(a)
+                conn.commit()
+            #找出连接层对应的属性
+            list_2 = ['MAC_dst','MAC_src','IP_type']
+            mts=set(list_2)
+            ks=set(changcos)
+            makey=ks&mts #取交集
+            if makey !=set([]):
+
+                mainkeys=list(makey)
+                mainvalues=[]
+                for mainkey in mainkeys:
+                    n=changcos.index(mainkey)
+                    mainvalues.append(mainkey+" = "+changvas[n])
+
+                #更改连接层数据
+
+                mainkeysStr = ','.join(mainvalues)
+
+                a="UPDATE  Entertable  SET " + mainkeysStr +" WHERE prid2 = " +str(va)
+
+                conn.execute(a)
+                conn.commit()
+            #找出对应副表的属性
+            list_3 = ['version','ihl','tos','IP_len','IP_id','flags','frag','ttl','proto','IP_chksum','IP_src','IP_dst','tc','fl','plen','nh',
+                  'hilm','IPv6_src','IPv6_dst','hwtype','ptype','hwlen','op','hwsrc','psrc','hwdst','pdst','src_longitude',
+                  'src_latitude','dst_latitude','dat_longitude']
+            #Transprt keys
+            list_4 = ['sport','dport','seq','ack','dataofs','reserved','TCP_flags','window','chksum','urgptr','IP_len']
+            #Application keys
+            list_5 = ['url','protocol_edition','state_code','state_code_description','Content_Length','SINA_LB','Server','Connection',
+            'Api_Server_IP','SINA_TS','Date','Content_Type','Accept_Language','Accept_Encoding','Accept','User_Agent',
+            'Host','Referer','Cookie','response_body']
+
+
+            mts=[]
+            if (res==3) :
+                mts=set(list_3)
+            elif(res==4):
+                mts=set(list_4)
+            else:
+                mts=set(list_5)
+            ks=set(changcos)
+            makey=ks&mts #取交集
+            if makey !=set([]):
+
+                mainkeys=list(makey)
+                mainvalues=[]
+                for mainkey in mainkeys:
+                    n=changcos.index(mainkey)
+                    mainvalues.append(mainkey+" = "+changvas[n])
+
+                #更改数据
+
+                mainkeysStr = ','.join(mainvalues)
+
+                a="UPDATE "+ proname + "  SET " + mainkeysStr +" WHERE prid3 = " +str(va)
+
+                conn.execute(a)
+                conn.commit()
+
+    def count(self,layer=0):
+        '''
+        return the given layer 's count
+        @param :layer(interger)
+        the layer=0 means all of the record
+        the layer=1 means the count of records on the Entertable
+        the layer=2 means the count of records on the Networktable
+        the layer=3 means the count of records on the Transporttable
+        the layer=4 means the count of records on the Applicationtable
+
+        '''
+        conn = sqlite3.connect(self.dbPath)
+        if layer==0|layer==1:
+            cursor =conn.execute("SELECT count(*) FROM Maintable")
+            for row in cursor:
+
+                if row [0]!=None:
+
+                    return row [0]
+
+        elif layer==2:
+            cursor =conn.execute("SELECT count(*) FROM Networktable")
+            for row in cursor:
+
+                if row [0]!=None:
+
+                    return row [0]
+
+        elif layer==3:
+            cursor =conn.execute("SELECT count(*) FROM Transporttable")
+            for row in cursor:
+
+                if row [0]!=None:
+
+                    return row [0]
+
+        else :
+            cursor =conn.execute("SELECT count(*) FROM Applicationtable")
+            for row in cursor:
+
+                if row [0]!=None:
+
+                    return row [0]
+
+    def timeDelete(self):
+        '''
+        timeDeletede  data
+        '''
+
+        wishtime = raw_input()
+        DATE = time.localtime()[3]
+        conn =sqlite3.connect(self.dbPath)
+        conn.execute("DELETE FROM Maintable" + "WHERE time < (" + DATE + " - " + wishtime+")")
+        conn.execute("DELETE FROM Ethertable" + "WHERE time < (" + DATE + " - " + wishtime+")")
+        conn.execute("DELETE FROM Networktable" + "WHERE time < (" + DATE + " - " + wishtime+")")
+        conn.execute("DELETE FROM Applicationtable" + "WHERE time < (" + DATE + " - " + wishtime+")")
+        conn.execute("DELETE FROM Transporttable" + "WHERE time < (" + DATE + " - " + wishtime+")")
+        conn.execute("VACUUM")
+        conn.commit()
+        conn.close()
