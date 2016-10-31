@@ -150,6 +150,26 @@
             </div>
             <div class="panel-footer">
               <form class="form-inline" role="form">
+                <label for="">协议</label>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary filter-protocol-btn">all</button>
+                  <button type="button" class="btn btn-primary dropdown-toggle settings-theme" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">协议</span>
+                  </button>
+                  <ul class="dropdown-menu filter-protocol" role="menu">
+                    <li><a href="#">all</a></li>
+                    <li><a href="#">arp</a></li>
+                    <li><a href="#">ipv4</a></li>
+                    <li><a href="#">ipv6</a></li>
+                    <li><a href="#">udp</a></li>
+                    <li><a href="#">tcp</a></li>
+                    <li><a href="#">http</a></li>
+                  </ul>
+                </div>
+                <label for="filter-port">端口</label>
+                <input type="number" min="1" max="65535" class="form-control form-horizental filter-port" name="filter-port" placeholder="">
+                <button type="button" class="btn btn-default btn-clear-filter-port"><span class="glyphicon glyphicon-refresh"></span>清空</button>
                 <button type="button" class="previous btn btn-primary">&larr; 上一页</button>
                 第<span class="page-current"></span>页/共<span class="page-all"></span>页
                 <input type="number" min="1" max="1" class="form-control form-horizental page-number" name="page-number" placeholder="">

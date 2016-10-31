@@ -26,3 +26,6 @@ body {
 #pktChart, #pcap-detail .panel-body {
   height: 150px;
 }
+.filter-port {
+  display: inline-block;
+}
