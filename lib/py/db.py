@@ -368,7 +368,7 @@ class SQLite():
             con_vas.append(conditions[a].upper()+"="+con_values[a].upper())
 
         con_vaStr=' AND '.join(con_vas)
-        bb="SELECT " + keysStr + " FROM Maintable INNER JOIN Entertable INNER JOIN " + proname + " "
+        bb="SELECT " + keysStr + " FROM Maintable INNER JOIN Entertable"
         if proname:
             bb += " INNER JOIN " + proname
         bb += " ON ((Maintable.prid=Entertable.prid)&(Entertable.prid="+proname+".prid)) "
@@ -376,6 +376,7 @@ class SQLite():
             bb += "WHERE " + con_vaStr
 
         #返回字典
+        print bb
         cursor = conn.execute(bb)
         result = []
 
