@@ -13,9 +13,6 @@ if __name__ == '__main__':
     sq.createTransport()
     sq.createApplication()
     data = sq.selectData({}, {})
-    # print json.dumps({
-    #     'data': data
-    # })
     print json.dumps({
-        'message': 'hehe'
+        'data': data
     })

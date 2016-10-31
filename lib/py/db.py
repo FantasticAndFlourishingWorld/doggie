@@ -3,7 +3,7 @@
 import sqlite3
 import sys
 import os
-import time 
+import time
 def judgepro(keys,values):
     """
     judge if protocol in keys is true and return the tables need to be connected
@@ -128,8 +128,8 @@ class SQLite():
         conn.execute('''CREATE TABLE IF NOT EXISTS Transporttable '''+'''
             (
             prid INTEGER PRIMARY KEY,
-            sport TEXT,
-            dport TEXT,
+            sport INTEGER,
+            dport INTEGER,
             seq TEXT,
             ack TEXT,
             dataofs TEXT,
@@ -273,6 +273,7 @@ class SQLite():
             tvaluesStr = ','.join(tvalues)
 
             a="INSERT INTO "+ proname + " (prid," + tkeysStr + ")"+"VALUES"+"((SELECT max(prid) FROM Maintable)," + tvaluesStr + ")"
+
             conn.execute(a)
             conn.commit()
 
@@ -295,14 +296,14 @@ class SQLite():
             if keys==None:
                 keys=[
                 'protocol',
-                'packet',
+                # 'packet',
                 'time',
                 'length',
                 'http',
                 'UDP_len',
                 'MAC_dst',
                 'MAC_src',
-                'IP_type',
+                # 'IP_type',
                 'version',
                 'ihl',
                 'tos',
@@ -341,7 +342,7 @@ class SQLite():
             if keys==None:
                 keys=[
                 'protocol',
-                'packet',
+                # 'packet',
                 'time',
                 'length',
                 'http',
@@ -367,14 +368,14 @@ class SQLite():
             if keys==None:
                 keys=[
                 'protocol',
-                'packet',
+                # 'packet',
                 'time',
                 'length',
                 'http',
                 'UDP_len',
                 'MAC_dst',
                 'MAC_src',
-                'IP_type',
+                # 'IP_type',
                 'url',
                 'protocol_edition',
                 'state_code',
@@ -396,7 +397,7 @@ class SQLite():
                 'Cookie',
                 'response_body'
                 ]
-                
+
         # print keys
         keysStr=','.join(keys).upper()
 
@@ -414,6 +415,7 @@ class SQLite():
 
         con_vaStr=' AND '.join(con_vas)
         bb="SELECT " + keysStr + " FROM Maintable INNER JOIN Entertable"
+
         if proname:
             bb += " INNER JOIN " + proname
         bb += " ON ((Maintable.prid=Entertable.prid)&(Entertable.prid="+proname+".prid)) "
@@ -421,7 +423,6 @@ class SQLite():
             bb += "WHERE " + con_vaStr
 
         #返回字典
-        print bb
         cursor = conn.execute(bb)
         result = []
 
@@ -468,7 +469,7 @@ class SQLite():
         conn.commit()
         conn.close()
 
-  def timeDelete(self):
+    def timeDelete(self):
         '''
         timeDeletede  data
 
@@ -485,4 +486,3 @@ class SQLite():
         conn.execute("DELETE FROM " + self.dbName + ".Transporttable" + "WHERE time < (" + time +")")
         conn.commit()
         conn.close()
-
